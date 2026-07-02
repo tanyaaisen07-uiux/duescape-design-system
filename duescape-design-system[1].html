@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="light">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Duescape — Design System</title>
+<style>
+  /* ============ TOKENS ============ */
+  :root{
+    /* Brand */
+    --blue-600:#1D5CF2;        /* Primary / Duescape Blue */
+    --blue-500:#2F6BFF;        /* Links, accents, dates, toggle ON */
+    --blue-400:#3D7BFF;        /* Gradient start */
+    --blue-100:#DCE7FF;        /* Soft fills, light chart bars */
+    --grad-card:linear-gradient(135deg,#3D7BFF 0%,#1D5CF2 60%,#1648C8 100%);
+
+    /* Semantic */
+    --green-500:#3FBF7F;       /* Active status, success */
+    --green-100:#E3F5EC;
+    --mint-100:#DDF7EE;        /* Info chip background */
+    --red-500:#D93A2F;         /* Destructive */
+    --red-100:#FBE7E5;
+
+    /* Light theme surfaces */
+    --bg:#F1F3F8;
+    --surface:#FFFFFF;
+    --surface-2:#F4F6FA;
+    --border:#E6E9F0;
+
+    /* Text */
+    --text-1:#0E1320;
+    --text-2:#6E7891;
+    --text-3:#9AA3B5;
+
+    --shadow-card:0 2px 10px rgba(14,19,32,.06);
+
+    /* Geometry */
+    --r-card:16px;
+    --r-tile:14px;
+    --r-input:12px;
+    --r-btn:12px;
+    --r-pill:999px;
+
+    /* Spacing scale (base 4) */
+    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
+
+    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
+  }
+  [data-theme="dark"]{
+    --bg:#0A0D16;
+    --surface:#121624;
+    --surface-2:#1A1F30;
+    --border:#232940;
+    --text-1:#F5F7FA;
+    --text-2:#8A94A8;
+    --text-3:#5E6678;
+    --blue-100:#1B3D8F;
+    --green-100:rgba(63,191,127,.16);
+    --mint-100:rgba(63,191,127,.14);
+    --red-100:rgba(217,58,47,.18);
+    --shadow-card:0 2px 12px rgba(0,0,0,.35);
+  }
+
+  /* ============ PAGE ============ */
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{font-family:var(--font);background:var(--bg);color:var(--text-1);transition:background .3s,color .3s;padding-bottom:80px}
+  .wrap{max-width:980px;margin:0 auto;padding:0 var(--s-6)}
+
+  header.hero{padding:56px 0 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
+  .logo-row{display:flex;align-items:center;gap:14px}
+  .logo-mark{width:44px;height:44px;border-radius:12px;background:var(--grad-card);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
+  h1{font-size:30px;font-weight:800;letter-spacing:-.02em}
+  .hero p{color:var(--text-2);margin-top:6px;max-width:540px;font-size:14px;line-height:1.55}
+
+  .theme-switch{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:4px;box-shadow:var(--shadow-card)}
+  .theme-switch button{border:0;background:transparent;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:600;padding:8px 18px;border-radius:var(--r-pill);cursor:pointer}
+  .theme-switch button.on{background:var(--blue-600);color:#fff}
+
+  section{margin-top:48px}
+  .sec-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-500);margin-bottom:6px}
+  h2{font-size:20px;font-weight:700;margin-bottom:18px}
+  .note{font-size:12.5px;color:var(--text-2);margin:-10px 0 18px;line-height:1.5}
+
+  /* ============ PRINCIPLES ============ */
+  .grid{display:grid;gap:14px}
+  .princ{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+  .princ-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:22px;box-shadow:var(--shadow-card);border-top:3px solid var(--blue-600)}
+  .princ-card .p-mark{font-size:16px;font-weight:800;letter-spacing:-.01em}
+  .princ-card p{font-size:13.5px;color:var(--text-1);margin-top:8px;line-height:1.5}
+  .p-link{font-size:12px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);line-height:1.5}
+
+  /* ============ SWATCHES ============ */
+  .colors{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
+  .swatch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-card)}
+  .chip{height:64px}
+  .swatch .meta{padding:10px 12px}
+  .swatch .name{font-size:12.5px;font-weight:600}
+  .swatch .hex{font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace;margin-top:2px}
+
+  /* ============ TYPE ============ */
+  .type-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
+  .type-row{display:flex;align-items:baseline;gap:20px;padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+  .type-row:last-child{border-bottom:0}
+  .type-spec{width:190px;flex-shrink:0;font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace;line-height:1.5}
+  .t-display{font-size:28px;font-weight:800;letter-spacing:-.02em}
+  .t-h2{font-size:18px;font-weight:700}
+  .t-card{font-size:15px;font-weight:600}
+  .t-label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
+  .t-body{font-size:14px;color:var(--text-1)}
+  .t-caption{font-size:12px;color:var(--text-2)}
+  .t-num{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
+  .t-link{font-size:12px;font-weight:600;color:var(--blue-500)}
+
+  /* ============ GEOMETRY ============ */
+  .geo{display:flex;gap:14px;flex-wrap:wrap}
+  .geo .g{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-card);padding:18px;text-align:center;font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace}
+  .sp-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
+  .sp{background:var(--blue-100);border-radius:4px}
+  .sp-cell{text-align:center;font-size:11px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace}
+  .sp-cell div:last-child{margin-top:6px}
+
+  /* ============ COMPONENTS ============ */
+  .comp-grid{grid-template-columns:repeat(auto-fit,minmax(290px,1fr));align-items:start}
+  .comp{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:var(--s-5);box-shadow:var(--shadow-card)}
+  .comp h3{font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text-2)}
+
+  .label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
+
+  /* Balance card (gradient) */
+  .balance{background:var(--grad-card);border-radius:var(--r-card);padding:18px;color:#fff;position:relative;overflow:hidden}
+  .balance::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08)}
+  .balance .label{color:rgba(255,255,255,.75)}
+  .balance .amt{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
+  .balance .sub{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:8px}
+  .balance .next{font-size:13px;font-weight:700;margin-top:2px}
+  .balance .chip-ic{position:absolute;top:16px;right:16px;width:34px;height:24px;border-radius:5px;background:linear-gradient(135deg,#F7C948,#E8A317)}
+  .balance .mc{position:absolute;bottom:16px;right:16px;display:flex}
+  .balance .mc i{width:20px;height:20px;border-radius:50%}
+  .balance .mc i:first-child{background:#EB001B;margin-right:-8px}
+  .balance .mc i:last-child{background:#F79E1B;opacity:.9}
+
+  /* Buttons */
+  .btn{font-family:inherit;font-size:13.5px;font-weight:600;border:0;border-radius:var(--r-btn);padding:11px 20px;cursor:pointer}
+  .btn-primary{background:var(--blue-600);color:#fff}
+  .btn-block{display:block;width:100%}
+  .btn-pill{border-radius:var(--r-pill)}
+  .btn-danger{background:var(--red-500);color:#fff}
+  .btn-ghost{background:transparent;color:var(--text-1);border:1px solid var(--border)}
+  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
+
+  /* Badges + info chips */
+  .badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--r-pill)}
+  .badge-active{background:var(--green-500);color:#fff}
+  .badge-soft-green{background:var(--green-100);color:var(--green-500)}
+  .badge-soft-red{background:var(--red-100);color:var(--red-500)}
+  .info-chip{border-radius:var(--r-input);padding:12px 16px;font-size:13px;font-weight:700;line-height:1.4}
+  .info-chip small{display:block;font-weight:600;font-size:12px;opacity:.85}
+  .chip-mint{background:var(--mint-100);color:var(--blue-600)}
+  .chip-green{background:var(--green-500);color:#fff}
+
+  /* Action tiles */
+  .tiles{display:flex;gap:10px}
+  .tile{flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-tile);padding:14px 8px;text-align:center;cursor:pointer}
+  .tile .ic{width:34px;height:34px;border-radius:10px;background:var(--surface);border:1px solid var(--border);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:15px}
+  .tile span{font-size:11px;font-weight:600;color:var(--text-1);display:block;line-height:1.3}
+
+  /* Category icons */
+  .cats{display:flex;gap:14px}
+  .cat{text-align:center;cursor:pointer}
+  .cat .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin:0 auto 6px;color:#fff}
+  .cat span{font-size:10.5px;color:var(--text-2)}
+
+  /* Payment row */
+  .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
+  .row:last-child{border-bottom:0}
+  .row .l{display:flex;align-items:center;gap:12px}
+  .brand{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
+  .row .nm{font-size:14px;font-weight:600}
+  .row .sub{font-size:11.5px;color:var(--text-2);margin-top:2px}
+  .row .sub b{color:var(--blue-500);font-weight:600}
+
+  /* Settings row */
+  .set-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-input);padding:12px 14px;margin-bottom:10px}
+  .set-row:last-child{margin-bottom:0}
+  .set-row .l{display:flex;align-items:center;gap:11px}
+  .set-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
+  .set-row .nm{font-size:13.5px;font-weight:600}
+  .chev{color:var(--blue-500);font-weight:700}
+
+  /* Toggle */
+  .toggle{width:46px;height:27px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--border);position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
+  .toggle i{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}
+  .toggle.on{background:var(--blue-500);border-color:var(--blue-500)}
+  .toggle.on i{left:21px}
+  .toggle-row{display:flex;align-items:center;justify-content:space-between}
+
+  /* Bottom nav */
+  .bnav{display:flex;justify-content:space-around;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:14px 10px}
+  .bnav i{font-style:normal;font-size:18px;color:var(--text-3);cursor:pointer}
+  .bnav i.on{color:var(--blue-600)}
+
+  /* Search + chips */
+  .search{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-input);padding:11px 14px;color:var(--text-3);font-size:13.5px}
+  .chips{display:flex;gap:8px;flex-wrap:wrap}
+  .chip-f{font-size:12px;font-weight:600;padding:7px 14px;border-radius:var(--r-pill);border:1px solid var(--border);color:var(--text-2);background:var(--surface);cursor:pointer}
+  .chip-f.sel{background:var(--blue-600);border-color:var(--blue-600);color:#fff}
+
+  /* Chart */
+  .bars{display:flex;align-items:flex-end;gap:12px;height:90px;padding-top:8px}
+  .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
+  .bar i{width:100%;max-width:34px;background:var(--blue-600);border-radius:var(--r-pill)}
+  .bar span{font-size:10.5px;color:var(--text-2)}
+
+  /* ============ COMPONENT IN CONTEXT ============ */
+  .ctx{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
+  .phone{width:310px;background:var(--bg);border:1px solid var(--border);border-radius:30px;padding:20px 14px;box-shadow:var(--shadow-card);flex-shrink:0}
+  .greet{display:flex;align-items:center;justify-content:space-between;padding:0 2px}
+  .greet small{display:block;font-size:11px;color:var(--text-2)}
+  .greet small b{color:var(--blue-500)}
+  .greet .ttl{font-size:16px;font-weight:800}
+  .greet .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border)}
+  .pcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:12px;position:relative}
+  .pcard.dim{opacity:.5}
+  .pcard.hl{border-color:var(--blue-500);box-shadow:0 0 0 1px var(--blue-500)}
+  .pcard.bal{border:0;padding:0;overflow:visible}
+  .pcard.bal .balance{box-shadow:0 0 0 2px var(--blue-500)}
+  .mk{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;background:var(--blue-600);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:2}
+  .ctx-notes{flex:1;min-width:280px;display:flex;flex-direction:column;gap:14px}
+  .ctx-note{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:18px 20px;box-shadow:var(--shadow-card)}
+  .ctx-note .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
+  .ctx-note .n{width:22px;height:22px;border-radius:50%;background:var(--blue-600);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .ctx-note h3{font-size:14.5px;font-weight:700}
+  .ctx-note p{font-size:13px;color:var(--text-2);line-height:1.55}
+  .ctx-note .pr{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:var(--blue-500);letter-spacing:.06em;text-transform:uppercase}
+
+  /* ============ CODE ============ */
+  pre{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:20px;font-size:12px;line-height:1.65;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--text-1);box-shadow:var(--shadow-card)}
+  .copy-hint{font-size:11.5px;color:var(--text-3);margin-top:8px}
+
+  /* ============ ICONOGRAPHY ============ */
+  .icon-grid{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
+  .icon-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-tile);box-shadow:var(--shadow-card);width:88px;padding:14px 6px;text-align:center}
+  .icon-cell svg{width:24px;height:24px;stroke:var(--text-1);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+  .icon-cell span{display:block;font-size:10.5px;color:var(--text-2);margin-top:8px}
+  .icon-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
+  .icon-rule{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:16px 18px;box-shadow:var(--shadow-card);font-size:12.5px;color:var(--text-2);line-height:1.55}
+  .icon-rule b{display:block;color:var(--text-1);font-size:13px;margin-bottom:5px}
+
+  /* ============ FOOTER ============ */
+  footer{margin-top:64px;border-top:1px solid var(--border);padding:28px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
+  footer .made{font-size:12.5px;color:var(--text-2)}
+  footer .made b{color:var(--text-1);font-weight:700}
+  .f-links{display:flex;gap:10px;flex-wrap:wrap}
+  .f-link{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--text-1);text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:8px 16px;box-shadow:var(--shadow-card);transition:.15s}
+  .f-link:hover{border-color:var(--blue-500);color:var(--blue-500)}
+  .f-link .ic{width:16px;height:16px;display:inline-flex}
+  .f-link .ic svg{width:100%;height:100%;fill:currentColor}
+</style>
+</head>
+<body>
+<div class="wrap">
+
+  <header class="hero">
+    <div>
+      <div class="logo-row">
+        <div class="logo-mark">D</div>
+        <h1>Duescape — Design System</h1>
+      </div>
+      <p>Design system extracted from the Duescape mobile app mockups — a subscription &amp; budget tracker. Two themes, one token set. Color values are approximated from screenshots and should be verified against the source file.</p>
+    </div>
+    <div class="theme-switch" role="group" aria-label="Theme">
+      <button id="btnLight" class="on" onclick="setTheme('light')">Light</button>
+      <button id="btnDark" onclick="setTheme('dark')">Dark</button>
+    </div>
+  </header>
+
+  <!-- PRINCIPLES -->
+  <section style="margin-top:8px">
+    <div class="sec-label">01 — Principles</div>
+    <h2>Design Principles</h2>
+    <p class="note">Three rules that make this system Duescape — not just any fintech. Every component below exists to serve one of them.</p>
+    <div class="grid princ">
+      <div class="princ-card">
+        <div class="p-mark">Clarity First</div>
+        <p>The most important information is visible without interaction.</p>
+        <div class="p-link">In the system: the gradient Balance Card opens every screen — total, active count and next payment in one glance, zero taps.</div>
+      </div>
+      <div class="princ-card">
+        <div class="p-mark">Action Over Analysis</div>
+        <p>Recommendations should suggest what to do, not only what happened.</p>
+        <div class="p-link">In the system: Subscription Actions tiles, Smart Suggestion with a concrete saving amount, Pause / Cancel / Save changes controls.</div>
+      </div>
+      <div class="princ-card">
+        <div class="p-mark">Familiar by Default</div>
+        <p>Interactions follow native mobile patterns.</p>
+        <div class="p-link">In the system: iOS-style toggle, bottom tab bar, chevron settings rows, horizontally scrolling category icons.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COLORS -->
+  <section>
+    <div class="sec-label">02 — Color</div>
+    <h2>Palette</h2>
+    <p class="note">Switch the theme above — surfaces and text adapt, brand colors stay stable. This is the Light / Dark logic from the mockups expressed as tokens. The card gradient runs #3D7BFF → #1D5CF2 → #1648C8 at 135°.</p>
+    <div class="grid colors" id="swatches"></div>
+  </section>
+
+  <!-- TYPOGRAPHY -->
+  <section>
+    <div class="sec-label">03 — Typography</div>
+    <h2>Type scale</h2>
+    <p class="note">Typeface: Inter (SF Pro on iOS). Amounts use tabular figures so values don't jump. Dates inside list rows are links-colored blue — a recurring Duescape pattern.</p>
+    <div class="type-table">
+      <div class="type-row"><div class="type-spec">Display / 28 / 800<br>letter-spacing −2%</div><div class="t-display">€ 248,30</div></div>
+      <div class="type-row"><div class="type-spec">H2 Section / 18 / 700</div><div class="t-h2">Subscription actions</div></div>
+      <div class="type-row"><div class="type-spec">Card title / 15 / 600</div><div class="t-card">Billing history</div></div>
+      <div class="type-row"><div class="type-spec">Label / 11 / 700<br>uppercase, ls +9%</div><div class="t-label">Monthly total</div></div>
+      <div class="type-row"><div class="type-spec">Body / 14 / 400</div><div class="t-body">Active monthly commitments</div></div>
+      <div class="type-row"><div class="type-spec">Caption / 12 / 400</div><div class="t-caption">Notify 2 days before charge</div></div>
+      <div class="type-row"><div class="type-spec">Numeric / 15 / 700<br>tabular-nums</div><div class="t-num">€12.99</div></div>
+      <div class="type-row"><div class="type-spec">Inline link / 12 / 600<br>blue-500</div><div class="t-link">Next Payment: 12 Apr</div></div>
+    </div>
+  </section>
+
+  <!-- GEOMETRY -->
+  <section>
+    <div class="sec-label">04 — Geometry</div>
+    <h2>Radius &amp; spacing</h2>
+    <div class="geo" style="margin-bottom:26px">
+      <div class="g" style="border-radius:16px;width:124px">cards<br>r-16</div>
+      <div class="g" style="border-radius:14px;width:124px">tiles<br>r-14</div>
+      <div class="g" style="border-radius:12px;width:124px">inputs / CTA<br>r-12</div>
+      <div class="g" style="border-radius:999px;width:124px">pills / chips<br>r-full</div>
+    </div>
+    <div class="sp-row">
+      <div class="sp-cell"><div class="sp" style="width:4px;height:4px"></div><div>4</div></div>
+      <div class="sp-cell"><div class="sp" style="width:8px;height:8px"></div><div>8</div></div>
+      <div class="sp-cell"><div class="sp" style="width:12px;height:12px"></div><div>12</div></div>
+      <div class="sp-cell"><div class="sp" style="width:16px;height:16px"></div><div>16</div></div>
+      <div class="sp-cell"><div class="sp" style="width:20px;height:20px"></div><div>20</div></div>
+      <div class="sp-cell"><div class="sp" style="width:24px;height:24px"></div><div>24</div></div>
+      <div class="sp-cell"><div class="sp" style="width:32px;height:32px"></div><div>32</div></div>
+    </div>
+    <p class="note" style="margin-top:14px">Base unit — 4px. Card padding: 16–20. Section gap: 24–32. Two button shapes coexist: block CTAs ("Save changes") use r-12; inline quick actions ("Pause", "Delete") use pills.</p>
+  </section>
+
+  <!-- COMPONENTS -->
+  <section>
+    <div class="sec-label">05 — Components</div>
+    <h2>Live components</h2>
+    <div class="grid comp-grid">
+
+      <div class="comp">
+        <h3>Balance card (gradient)</h3>
+        <div class="balance">
+          <div class="chip-ic"></div>
+          <div class="label">Monthly total</div>
+          <div class="amt">€ 248,30</div>
+          <div class="sub">6 active subscriptions</div>
+          <div class="sub" style="margin-top:10px">Next payment:</div>
+          <div class="next">Netflix · Apr 12</div>
+          <div class="mc"><i></i><i></i></div>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Action tiles</h3>
+        <div class="tiles">
+          <div class="tile"><div class="ic">＋</div><span>Add subscription</span></div>
+          <div class="tile"><div class="ic">⇣</div><span>Import subscriptions</span></div>
+          <div class="tile"><div class="ic">🔔</div><span>Manage reminders</span></div>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Category icons</h3>
+        <div class="cats">
+          <div class="cat"><div class="ic" style="background:#E53935">▶</div><span>Streaming</span></div>
+          <div class="cat"><div class="ic" style="background:#1D5CF2">⚙</div><span>Software</span></div>
+          <div class="cat"><div class="ic" style="background:#0E1320">☁</div><span>Cloud</span></div>
+          <div class="cat"><div class="ic" style="background:#2F6BFF">📊</div><span>Finance</span></div>
+          <div class="cat"><div class="ic" style="background:#101728">🎮</div><span>Games</span></div>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Upcoming payments — list rows</h3>
+        <div class="row">
+          <div class="l"><div class="brand" style="background:#0E1320">N</div><div><div class="nm">Netflix</div><div class="sub">Next Payment: <b>12 Apr</b></div></div></div>
+          <span class="t-num">€12.99</span>
+        </div>
+        <div class="row">
+          <div class="l"><div class="brand" style="background:#0E2A66">P</div><div><div class="nm">Paypal</div><div class="sub">Next Payment: <b>14 Apr</b></div></div></div>
+          <span class="t-num">€10.00</span>
+        </div>
+        <div class="row">
+          <div class="l"><div class="brand" style="background:#1DB954">S</div><div><div class="nm">Spotify</div><div class="sub">Next Payment: <b>20 Apr</b></div></div></div>
+          <span class="t-num">€12.99</span>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Info chips</h3>
+        <div class="btn-row">
+          <div class="info-chip chip-mint"><small>Billing cycle</small>Monthly</div>
+          <div class="info-chip chip-green"><small>Billing status</small>Active</div>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Settings rows</h3>
+        <div class="set-row">
+          <div class="l"><div class="set-ic" style="background:var(--mint-100)">⏸</div><span class="nm">Pause reminders</span></div>
+          <span class="chev">›</span>
+        </div>
+        <div class="set-row">
+          <div class="l"><div class="set-ic" style="background:var(--red-100)">✕</div><span class="nm">Cancel subscription</span></div>
+          <div class="toggle" onclick="this.classList.toggle('on')"><i></i></div>
+        </div>
+        <div class="set-row">
+          <div class="l"><div class="set-ic" style="background:var(--blue-100)">📅</div><span class="nm">Change billing date</span></div>
+          <div class="toggle on" onclick="this.classList.toggle('on')"><i></i></div>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Buttons</h3>
+        <div class="btn-row" style="margin-bottom:12px">
+          <button class="btn btn-primary btn-pill">View case</button>
+          <button class="btn btn-danger btn-pill">Delete</button>
+          <button class="btn btn-ghost btn-pill">Pause</button>
+        </div>
+        <button class="btn btn-primary btn-block">Save changes</button>
+      </div>
+
+      <div class="comp">
+        <h3>Badges</h3>
+        <div class="btn-row">
+          <span class="badge badge-active">Active</span>
+          <span class="badge badge-soft-green">On track</span>
+          <span class="badge badge-soft-red">Overdue</span>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Search + filter chips</h3>
+        <div class="search">⌕&nbsp; Search subscriptions</div>
+        <div class="chips" style="margin-top:12px">
+          <button class="chip-f sel">Monthly</button>
+          <button class="chip-f">Yearly</button>
+          <button class="chip-f">Trials</button>
+          <button class="chip-f">Active</button>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Bottom navigation</h3>
+        <div class="bnav">
+          <i class="on">⌂</i><i>◎</i><i>☺</i><i>📈</i><i>⊞</i>
+        </div>
+      </div>
+
+      <div class="comp">
+        <h3>Bar chart</h3>
+        <div class="label" style="margin-bottom:4px">Monthly trend</div>
+        <div class="bars">
+          <div class="bar"><i style="height:34%"></i><span>Aug</span></div>
+          <div class="bar"><i style="height:42%"></i><span>Sep</span></div>
+          <div class="bar"><i style="height:38%"></i><span>Oct</span></div>
+          <div class="bar"><i style="height:55%"></i><span>Nov</span></div>
+          <div class="bar"><i style="height:78%"></i><span>Dec</span></div>
+          <div class="bar"><i style="height:64%"></i><span>Jan</span></div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ICONOGRAPHY -->
+  <section>
+    <div class="sec-label">06 — Iconography</div>
+    <h2>Icons</h2>
+    <p class="note">Line icons, single stroke weight — matching the mockups. Recommended set: Lucide / Feather (web) or SF Symbols Regular (iOS). Icons inherit text color via currentColor, so they adapt to both themes automatically.</p>
+    <div class="icon-grid">
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>home</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>add</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v3h16v-3"/></svg><span>import</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10 21h4"/></svg><span>bell</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span>search</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7"/></svg><span>stats</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/></svg><span>calendar</span></div>
+      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span>chevron</span></div>
+    </div>
+    <div class="icon-rules">
+      <div class="icon-rule"><b>Stroke &amp; size</b>Stroke 1.5–2px, rounded caps and joins. Three sizes: 16 (inline), 20 (rows), 24 (navigation, tiles).</div>
+      <div class="icon-rule"><b>Containers</b>Category icons sit in 44px tiles (r-12) on solid brand colors, white glyph. Settings icons sit in 30px tiles (r-8) on soft semantic fills.</div>
+      <div class="icon-rule"><b>Color</b>Default icons use text-1 / text-3; the active nav tab uses blue-600. Never mix filled and outlined styles in one surface.</div>
+    </div>
+  </section>
+
+  <!-- COMPONENT IN CONTEXT -->
+  <section>
+    <div class="sec-label">07 — Component in Context</div>
+    <h2>Components in context</h2>
+    <p class="note">Not just "button, badge, toggle" — the role each component plays on the Dashboard. Numbers on the mock map to the cards on the right; each one answers "why does this component exist".</p>
+    <div class="ctx">
+
+      <div class="phone" aria-label="Dashboard screen">
+        <div class="greet">
+          <div><small>Good evening, <b>Alex</b></small><div class="ttl">Duescape</div></div>
+          <div class="ava"></div>
+        </div>
+
+        <div class="pcard bal"><span class="mk">1</span>
+          <div class="balance">
+            <div class="chip-ic"></div>
+            <div class="label">Monthly total</div>
+            <div class="amt" style="font-size:22px">€ 248,30</div>
+            <div class="sub">6 active subscriptions</div>
+            <div class="sub" style="margin-top:8px">Next payment:</div>
+            <div class="next" style="font-size:12.5px">Netflix · Apr 12</div>
+            <div class="mc"><i></i><i></i></div>
+          </div>
+        </div>
+
+        <div class="pcard hl"><span class="mk">2</span>
+          <div class="label" style="margin-bottom:10px">Subscription actions</div>
+          <div class="tiles">
+            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">＋</div><span style="font-size:10px">Add</span></div>
+            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">⇣</div><span style="font-size:10px">Import</span></div>
+            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">🔔</div><span style="font-size:10px">Reminders</span></div>
+          </div>
+        </div>
+
+        <div class="pcard dim">
+          <div class="label" style="margin-bottom:6px">Upcoming payments</div>
+          <div class="row" style="padding:8px 0">
+            <div class="l"><div class="brand" style="background:#0E1320;width:30px;height:30px;font-size:13px">N</div><div><div class="nm" style="font-size:13px">Netflix</div><div class="sub">Next Payment: <b>12 Apr</b></div></div></div>
+            <span class="t-num" style="font-size:13px">€12.99</span>
+          </div>
+        </div>
+
+        <div class="pcard hl" style="padding:10px 12px"><span class="mk">3</span>
+          <div class="bnav" style="border:0;padding:4px 0;background:transparent">
+            <i class="on">⌂</i><i>◎</i><i>☺</i><i>📈</i><i>⊞</i>
+          </div>
+        </div>
+      </div>
+
+      <div class="ctx-notes">
+        <div class="ctx-note">
+          <div class="head"><span class="n">1</span><h3>Monthly Total Card</h3></div>
+          <p>The Monthly Total card is the primary entry point to spending awareness. It answers "how much am I spending?" in under a second: total → active count → next payment, with zero taps. The gradient and card-chip visuals borrow the language of a physical bank card, so the number reads as money, not as a statistic.</p>
+          <span class="pr">Clarity First</span>
+        </div>
+        <div class="ctx-note">
+          <div class="head"><span class="n">2</span><h3>Subscription Actions</h3></div>
+          <p>Three tiles sit directly under the total — the answer to the number above them. The dashboard never shows a problem without an exit: add, import, or manage reminders is always one tap away. Insight and action live on the same screen.</p>
+          <span class="pr">Action Over Analysis</span>
+        </div>
+        <div class="ctx-note">
+          <div class="head"><span class="n">3</span><h3>Bottom Tab Bar</h3></div>
+          <p>A standard five-tab bottom navigation with the active tab in brand blue. No custom navigation metaphors where a native pattern exists — users already know how to move around before they open the app for the first time.</p>
+          <span class="pr">Familiar by Default</span>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- CODE -->
+  <section>
+    <div class="sec-label">08 — Developer tokens</div>
+    <h2>CSS variables</h2>
+<pre id="cssTokens">:root {
+  /* Brand */
+  --blue-600: #1D5CF2;   /* primary */
+  --blue-500: #2F6BFF;   /* links, accents, dates */
+  --blue-400: #3D7BFF;   /* gradient start */
+  --blue-100: #DCE7FF;
+  --grad-card: linear-gradient(135deg,#3D7BFF 0%,#1D5CF2 60%,#1648C8 100%);
+
+  /* Semantic */
+  --green-500: #3FBF7F;  /* active / success */
+  --mint-100:  #DDF7EE;  /* info chip bg */
+  --red-500:   #D93A2F;  /* destructive */
+
+  /* Light theme */
+  --bg:        #F1F3F8;
+  --surface:   #FFFFFF;
+  --surface-2: #F4F6FA;
+  --border:    #E6E9F0;
+  --text-1:    #0E1320;
+  --text-2:    #6E7891;
+  --text-3:    #9AA3B5;
+
+  /* Geometry */
+  --r-card: 16px;  --r-tile: 14px;  --r-input: 12px;
+  --r-btn: 12px;   --r-pill: 999px;
+  /* Spacing: 4 / 8 / 12 / 16 / 20 / 24 / 32 */
+}
+
+[data-theme="dark"] {
+  --bg:        #0A0D16;
+  --surface:   #121624;
+  --surface-2: #1A1F30;
+  --border:    #232940;
+  --text-1:    #F5F7FA;
+  --text-2:    #8A94A8;
+  --text-3:    #5E6678;
+}</pre>
+    <p class="copy-hint">Copy the block above into your project — every component on this page is built from these same variables.</p>
+  </section>
+
+  <!-- FOOTER -->
+  <footer>
+    <div class="made">Designed &amp; documented by <b>Tania Aisen</b> · Duescape Design System</div>
+    <div class="f-links">
+      <a class="f-link" href="https://YOUR-SITE.framer.website" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 2h16v7h-8zm0 7h8l8 7H4zm0 7h8v6z"/></svg></span>
+        Portfolio
+      </a>
+      <a class="f-link" href="https://github.com/tanyaaisen07-uiux/duescape-design-system" target="_blank" rel="noopener">
+        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.04.77 2.1v3.12c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></span>
+        Source code
+      </a>
+    </div>
+  </footer>
+
+</div>
+
+<script>
+  function setTheme(t){
+    document.documentElement.setAttribute('data-theme',t);
+    document.getElementById('btnLight').classList.toggle('on',t==='light');
+    document.getElementById('btnDark').classList.toggle('on',t==='dark');
+    renderSwatches();
+  }
+  const palette=[
+    ['Duescape Blue','--blue-600'],
+    ['Accent Blue','--blue-500'],
+    ['Gradient Start','--blue-400'],
+    ['Blue Soft','--blue-100'],
+    ['Success','--green-500'],
+    ['Mint Chip','--mint-100'],
+    ['Danger','--red-500'],
+    ['Background','--bg'],
+    ['Surface','--surface'],
+    ['Surface 2','--surface-2'],
+    ['Border','--border'],
+    ['Text Primary','--text-1'],
+    ['Text Secondary','--text-2'],
+    ['Text Tertiary','--text-3'],
+  ];
+  function renderSwatches(){
+    const cs=getComputedStyle(document.documentElement);
+    document.getElementById('swatches').innerHTML=palette.map(([name,v])=>{
+      const val=cs.getPropertyValue(v).trim();
+      return `<div class="swatch"><div class="chip" style="background:${val}"></div>
+        <div class="meta"><div class="name">${name}</div><div class="hex">${v} · ${val.toUpperCase()}</div></div></div>`;
+    }).join('');
+  }
+  renderSwatches();
+</script>
+</body>
+</html>
