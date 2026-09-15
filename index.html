@@ -1,667 +1,875 @@
-<!DOCTYPE html>
-<html lang="en" data-theme="light">
+<!doctype html>
+<html lang="en">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Duescape — Design System</title>
-<style>
-  /* ============ TOKENS ============ */
-  :root{
-    /* Brand */
-    --blue-600:#1D5CF2;        /* Primary / Duescape Blue */
-    --blue-500:#2F6BFF;        /* Links, accents, dates, toggle ON */
-    --blue-400:#3D7BFF;        /* Gradient start */
-    --blue-100:#DCE7FF;        /* Soft fills, light chart bars */
-    --grad-card:linear-gradient(135deg,#3D7BFF 0%,#1D5CF2 60%,#1648C8 100%);
-
-    /* Semantic */
-    --green-500:#3FBF7F;       /* Active status, success */
-    --green-100:#E3F5EC;
-    --mint-100:#DDF7EE;        /* Info chip background */
-    --red-500:#D93A2F;         /* Destructive */
-    --red-100:#FBE7E5;
-
-    /* Light theme surfaces */
-    --bg:#F1F3F8;
-    --surface:#FFFFFF;
-    --surface-2:#F4F6FA;
-    --border:#E6E9F0;
-
-    /* Text */
-    --text-1:#0E1320;
-    --text-2:#6E7891;
-    --text-3:#9AA3B5;
-
-    --shadow-card:0 2px 10px rgba(14,19,32,.06);
-
-    /* Geometry */
-    --r-card:16px;
-    --r-tile:14px;
-    --r-input:12px;
-    --r-btn:12px;
-    --r-pill:999px;
-
-    /* Spacing scale (base 4) */
-    --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px; --s-5:20px; --s-6:24px; --s-8:32px;
-
-    --font:'Inter',-apple-system,BlinkMacSystemFont,'Segoe UI',Roboto,sans-serif;
-  }
-  [data-theme="dark"]{
-    --bg:#0A0D16;
-    --surface:#121624;
-    --surface-2:#1A1F30;
-    --border:#232940;
-    --text-1:#F5F7FA;
-    --text-2:#8A94A8;
-    --text-3:#5E6678;
-    --blue-100:#1B3D8F;
-    --green-100:rgba(63,191,127,.16);
-    --mint-100:rgba(63,191,127,.14);
-    --red-100:rgba(217,58,47,.18);
-    --shadow-card:0 2px 12px rgba(0,0,0,.35);
-  }
-
-  /* ============ PAGE ============ */
-  *{box-sizing:border-box;margin:0;padding:0}
-  body{font-family:var(--font);background:var(--bg);color:var(--text-1);transition:background .3s,color .3s;padding-bottom:80px}
-  .wrap{max-width:980px;margin:0 auto;padding:0 var(--s-6)}
-
-  header.hero{padding:56px 0 40px;display:flex;align-items:flex-start;justify-content:space-between;gap:24px;flex-wrap:wrap}
-  .logo-row{display:flex;align-items:center;gap:14px}
-  .logo-mark{width:44px;height:44px;border-radius:12px;background:var(--grad-card);display:flex;align-items:center;justify-content:center;color:#fff;font-weight:800;font-size:20px}
-  h1{font-size:30px;font-weight:800;letter-spacing:-.02em}
-  .hero p{color:var(--text-2);margin-top:6px;max-width:540px;font-size:14px;line-height:1.55}
-
-  .theme-switch{display:flex;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:4px;box-shadow:var(--shadow-card)}
-  .theme-switch button{border:0;background:transparent;color:var(--text-2);font-family:inherit;font-size:13px;font-weight:600;padding:8px 18px;border-radius:var(--r-pill);cursor:pointer}
-  .theme-switch button.on{background:var(--blue-600);color:#fff}
-
-  section{margin-top:48px}
-  .sec-label{font-size:11px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--blue-500);margin-bottom:6px}
-  h2{font-size:20px;font-weight:700;margin-bottom:18px}
-  .note{font-size:12.5px;color:var(--text-2);margin:-10px 0 18px;line-height:1.5}
-
-  /* ============ PRINCIPLES ============ */
-  .grid{display:grid;gap:14px}
-  .princ{grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
-  .princ-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:22px;box-shadow:var(--shadow-card);border-top:3px solid var(--blue-600)}
-  .princ-card .p-mark{font-size:16px;font-weight:800;letter-spacing:-.01em}
-  .princ-card p{font-size:13.5px;color:var(--text-1);margin-top:8px;line-height:1.5}
-  .p-link{font-size:12px;color:var(--text-2);margin-top:12px;padding-top:12px;border-top:1px dashed var(--border);line-height:1.5}
-
-  /* ============ SWATCHES ============ */
-  .colors{grid-template-columns:repeat(auto-fill,minmax(150px,1fr))}
-  .swatch{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);overflow:hidden;box-shadow:var(--shadow-card)}
-  .chip{height:64px}
-  .swatch .meta{padding:10px 12px}
-  .swatch .name{font-size:12.5px;font-weight:600}
-  .swatch .hex{font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace;margin-top:2px}
-
-  /* ============ TYPE ============ */
-  .type-table{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);box-shadow:var(--shadow-card)}
-  .type-row{display:flex;align-items:baseline;gap:20px;padding:16px 20px;border-bottom:1px solid var(--border);flex-wrap:wrap}
-  .type-row:last-child{border-bottom:0}
-  .type-spec{width:190px;flex-shrink:0;font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace;line-height:1.5}
-  .t-display{font-size:28px;font-weight:800;letter-spacing:-.02em}
-  .t-h2{font-size:18px;font-weight:700}
-  .t-card{font-size:15px;font-weight:600}
-  .t-label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
-  .t-body{font-size:14px;color:var(--text-1)}
-  .t-caption{font-size:12px;color:var(--text-2)}
-  .t-num{font-size:15px;font-weight:700;font-variant-numeric:tabular-nums}
-  .t-link{font-size:12px;font-weight:600;color:var(--blue-500)}
-
-  /* ============ GEOMETRY ============ */
-  .geo{display:flex;gap:14px;flex-wrap:wrap}
-  .geo .g{background:var(--surface);border:1px solid var(--border);box-shadow:var(--shadow-card);padding:18px;text-align:center;font-size:11.5px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace}
-  .sp-row{display:flex;align-items:flex-end;gap:14px;flex-wrap:wrap}
-  .sp{background:var(--blue-100);border-radius:4px}
-  .sp-cell{text-align:center;font-size:11px;color:var(--text-2);font-family:ui-monospace,Menlo,monospace}
-  .sp-cell div:last-child{margin-top:6px}
-
-  /* ============ COMPONENTS ============ */
-  .comp-grid{grid-template-columns:repeat(auto-fit,minmax(290px,1fr));align-items:start}
-  .comp{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:var(--s-5);box-shadow:var(--shadow-card)}
-  .comp h3{font-size:13px;font-weight:700;margin-bottom:14px;color:var(--text-2)}
-
-  .label{font-size:11px;font-weight:700;letter-spacing:.09em;text-transform:uppercase;color:var(--text-2)}
-
-  /* Balance card (gradient) */
-  .balance{background:var(--grad-card);border-radius:var(--r-card);padding:18px;color:#fff;position:relative;overflow:hidden}
-  .balance::after{content:'';position:absolute;right:-40px;top:-40px;width:160px;height:160px;border-radius:50%;background:rgba(255,255,255,.08)}
-  .balance .label{color:rgba(255,255,255,.75)}
-  .balance .amt{font-size:26px;font-weight:800;letter-spacing:-.02em;margin-top:4px}
-  .balance .sub{font-size:11.5px;color:rgba(255,255,255,.75);margin-top:8px}
-  .balance .next{font-size:13px;font-weight:700;margin-top:2px}
-  .balance .chip-ic{position:absolute;top:16px;right:16px;width:34px;height:24px;border-radius:5px;background:linear-gradient(135deg,#F7C948,#E8A317)}
-  .balance .mc{position:absolute;bottom:16px;right:16px;display:flex}
-  .balance .mc i{width:20px;height:20px;border-radius:50%}
-  .balance .mc i:first-child{background:#EB001B;margin-right:-8px}
-  .balance .mc i:last-child{background:#F79E1B;opacity:.9}
-
-  /* Buttons */
-  .btn{font-family:inherit;font-size:13.5px;font-weight:600;border:0;border-radius:var(--r-btn);padding:11px 20px;cursor:pointer}
-  .btn-primary{background:var(--blue-600);color:#fff}
-  .btn-block{display:block;width:100%}
-  .btn-pill{border-radius:var(--r-pill)}
-  .btn-danger{background:var(--red-500);color:#fff}
-  .btn-ghost{background:transparent;color:var(--text-1);border:1px solid var(--border)}
-  .btn-row{display:flex;gap:10px;flex-wrap:wrap}
-
-  /* Badges + info chips */
-  .badge{display:inline-block;font-size:11px;font-weight:700;padding:4px 12px;border-radius:var(--r-pill)}
-  .badge-active{background:var(--green-500);color:#fff}
-  .badge-soft-green{background:var(--green-100);color:var(--green-500)}
-  .badge-soft-red{background:var(--red-100);color:var(--red-500)}
-  .info-chip{border-radius:var(--r-input);padding:12px 16px;font-size:13px;font-weight:700;line-height:1.4}
-  .info-chip small{display:block;font-weight:600;font-size:12px;opacity:.85}
-  .chip-mint{background:var(--mint-100);color:var(--blue-600)}
-  .chip-green{background:var(--green-500);color:#fff}
-
-  /* Action tiles */
-  .tiles{display:flex;gap:10px}
-  .tile{flex:1;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-tile);padding:14px 8px;text-align:center;cursor:pointer}
-  .tile .ic{width:34px;height:34px;border-radius:10px;background:var(--surface);border:1px solid var(--border);margin:0 auto 8px;display:flex;align-items:center;justify-content:center;font-size:15px}
-  .tile span{font-size:11px;font-weight:600;color:var(--text-1);display:block;line-height:1.3}
-
-  /* Category icons */
-  .cats{display:flex;gap:14px}
-  .cat{text-align:center;cursor:pointer}
-  .cat .ic{width:44px;height:44px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:19px;margin:0 auto 6px;color:#fff}
-  .cat span{font-size:10.5px;color:var(--text-2)}
-
-  /* Payment row */
-  .row{display:flex;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--border)}
-  .row:last-child{border-bottom:0}
-  .row .l{display:flex;align-items:center;gap:12px}
-  .brand{width:38px;height:38px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;font-weight:800;color:#fff;flex-shrink:0}
-  .row .nm{font-size:14px;font-weight:600}
-  .row .sub{font-size:11.5px;color:var(--text-2);margin-top:2px}
-  .row .sub b{color:var(--blue-500);font-weight:600}
-
-  /* Settings row */
-  .set-row{display:flex;align-items:center;justify-content:space-between;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-input);padding:12px 14px;margin-bottom:10px}
-  .set-row:last-child{margin-bottom:0}
-  .set-row .l{display:flex;align-items:center;gap:11px}
-  .set-ic{width:30px;height:30px;border-radius:8px;display:flex;align-items:center;justify-content:center;font-size:14px}
-  .set-row .nm{font-size:13.5px;font-weight:600}
-  .chev{color:var(--blue-500);font-weight:700}
-
-  /* Toggle */
-  .toggle{width:46px;height:27px;border-radius:var(--r-pill);background:var(--surface-2);border:1px solid var(--border);position:relative;cursor:pointer;transition:.2s;flex-shrink:0}
-  .toggle i{position:absolute;top:2px;left:2px;width:21px;height:21px;border-radius:50%;background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.25);transition:.2s}
-  .toggle.on{background:var(--blue-500);border-color:var(--blue-500)}
-  .toggle.on i{left:21px}
-  .toggle-row{display:flex;align-items:center;justify-content:space-between}
-
-  /* Bottom nav */
-  .bnav{display:flex;justify-content:space-around;align-items:center;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:14px 10px}
-  .bnav i{font-style:normal;font-size:18px;color:var(--text-3);cursor:pointer}
-  .bnav i.on{color:var(--blue-600)}
-
-  /* Search + chips */
-  .search{display:flex;align-items:center;gap:10px;background:var(--surface-2);border:1px solid var(--border);border-radius:var(--r-input);padding:11px 14px;color:var(--text-3);font-size:13.5px}
-  .chips{display:flex;gap:8px;flex-wrap:wrap}
-  .chip-f{font-size:12px;font-weight:600;padding:7px 14px;border-radius:var(--r-pill);border:1px solid var(--border);color:var(--text-2);background:var(--surface);cursor:pointer}
-  .chip-f.sel{background:var(--blue-600);border-color:var(--blue-600);color:#fff}
-
-  /* Chart */
-  .bars{display:flex;align-items:flex-end;gap:12px;height:90px;padding-top:8px}
-  .bar{flex:1;display:flex;flex-direction:column;align-items:center;gap:8px}
-  .bar i{width:100%;max-width:34px;background:var(--blue-600);border-radius:var(--r-pill)}
-  .bar span{font-size:10.5px;color:var(--text-2)}
-
-  /* ============ COMPONENT IN CONTEXT ============ */
-  .ctx{display:flex;gap:28px;flex-wrap:wrap;align-items:flex-start}
-  .phone{width:310px;background:var(--bg);border:1px solid var(--border);border-radius:30px;padding:20px 14px;box-shadow:var(--shadow-card);flex-shrink:0}
-  .greet{display:flex;align-items:center;justify-content:space-between;padding:0 2px}
-  .greet small{display:block;font-size:11px;color:var(--text-2)}
-  .greet small b{color:var(--blue-500)}
-  .greet .ttl{font-size:16px;font-weight:800}
-  .greet .ava{width:30px;height:30px;border-radius:50%;background:var(--surface-2);border:1px solid var(--border)}
-  .pcard{background:var(--surface);border:1px solid var(--border);border-radius:14px;padding:14px;margin-top:12px;position:relative}
-  .pcard.dim{opacity:.5}
-  .pcard.hl{border-color:var(--blue-500);box-shadow:0 0 0 1px var(--blue-500)}
-  .pcard.bal{border:0;padding:0;overflow:visible}
-  .pcard.bal .balance{box-shadow:0 0 0 2px var(--blue-500)}
-  .mk{position:absolute;top:-9px;right:-9px;width:22px;height:22px;border-radius:50%;background:var(--blue-600);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;z-index:2}
-  .ctx-notes{flex:1;min-width:280px;display:flex;flex-direction:column;gap:14px}
-  .ctx-note{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:18px 20px;box-shadow:var(--shadow-card)}
-  .ctx-note .head{display:flex;align-items:center;gap:10px;margin-bottom:8px}
-  .ctx-note .n{width:22px;height:22px;border-radius:50%;background:var(--blue-600);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0}
-  .ctx-note h3{font-size:14.5px;font-weight:700}
-  .ctx-note p{font-size:13px;color:var(--text-2);line-height:1.55}
-  .ctx-note .pr{display:inline-block;margin-top:10px;font-size:11px;font-weight:700;color:var(--blue-500);letter-spacing:.06em;text-transform:uppercase}
-
-  /* ============ CODE ============ */
-  pre{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:20px;font-size:12px;line-height:1.65;overflow-x:auto;font-family:ui-monospace,Menlo,Consolas,monospace;color:var(--text-1);box-shadow:var(--shadow-card)}
-  .copy-hint{font-size:11.5px;color:var(--text-3);margin-top:8px}
-
-  /* ============ ICONOGRAPHY ============ */
-  .icon-grid{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:18px}
-  .icon-cell{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-tile);box-shadow:var(--shadow-card);width:88px;padding:14px 6px;text-align:center}
-  .icon-cell svg{width:24px;height:24px;stroke:var(--text-1);fill:none;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
-  .icon-cell span{display:block;font-size:10.5px;color:var(--text-2);margin-top:8px}
-  .icon-rules{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:14px}
-  .icon-rule{background:var(--surface);border:1px solid var(--border);border-radius:var(--r-card);padding:16px 18px;box-shadow:var(--shadow-card);font-size:12.5px;color:var(--text-2);line-height:1.55}
-  .icon-rule b{display:block;color:var(--text-1);font-size:13px;margin-bottom:5px}
-
-  /* ============ FOOTER ============ */
-  footer{margin-top:64px;border-top:1px solid var(--border);padding:28px 0 8px;display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap}
-  footer .made{font-size:12.5px;color:var(--text-2)}
-  footer .made b{color:var(--text-1);font-weight:700}
-  .f-links{display:flex;gap:10px;flex-wrap:wrap}
-  .f-link{display:inline-flex;align-items:center;gap:8px;font-size:12.5px;font-weight:600;color:var(--text-1);text-decoration:none;background:var(--surface);border:1px solid var(--border);border-radius:var(--r-pill);padding:8px 16px;box-shadow:var(--shadow-card);transition:.15s}
-  .f-link:hover{border-color:var(--blue-500);color:var(--blue-500)}
-  .f-link .ic{width:16px;height:16px;display:inline-flex}
-  .f-link .ic svg{width:100%;height:100%;fill:currentColor}
-</style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="description" content="Duescape design system reference: colour tokens, typography, spacing, components, accessibility and motion, generated from the Figma variables.">
 </head>
 <body>
-<div class="wrap">
+<title>Duescape System Reference</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+:root{
+  --primary-50:#E6EEFF; --primary-100:#CCDDFF; --primary-200:#99BBFF; --primary-300:#6699FF; --primary-400:#3377FF;
+  --primary-500:#0057FF; --primary-600:#0046CC; --primary-700:#003499; --primary-800:#002366; --primary-900:#001133;
+  --neutral-0:#FFFFFF; --neutral-25:#F7F9FC; --neutral-50:#F8FAFC; --neutral-100:#F1F5F9; --neutral-200:#E2E8F0;
+  --neutral-300:#CBD5E1; --neutral-400:#94A3B8; --neutral-500:#64748B; --neutral-600:#475569; --neutral-700:#334155;
+  --neutral-800:#1E293B; --neutral-900:#0F172A;
+  --ink-100:#232940; --ink-200:#1A1F30; --ink-300:#121624; --ink-400:#0E1320; --ink-500:#080B14;
+  --success-50:#E6FFF6; --success-500:#00D4A4; --success-600:#00A680; --success-700:#00775C;
+  --warning-50:#FFF8E6; --warning-500:#FFB020; --warning-600:#D98C00; --warning-700:#966200;
+  --error-50:#FFEDED; --error-500:#FF4D4F; --error-600:#D93638; --error-700:#C02427;
 
-  <header class="hero">
-    <div>
-      <div class="logo-row">
-        <div class="logo-mark">D</div>
-        <h1>Duescape — Design System</h1>
-      </div>
-      <p>Design system extracted from the Duescape mobile app mockups — a subscription &amp; budget tracker. Two themes, one token set. Color values are approximated from screenshots and should be verified against the source file.</p>
-    </div>
-    <div class="theme-switch" role="group" aria-label="Theme">
-      <button id="btnLight" class="on" onclick="setTheme('light')">Light</button>
-      <button id="btnDark" onclick="setTheme('dark')">Dark</button>
-    </div>
-  </header>
+  --bg-canvas:var(--neutral-25); --bg-surface:var(--neutral-0); --bg-raised:var(--neutral-50); --bg-sunken:var(--neutral-100);
+  --border-default:var(--neutral-200); --border-strong:var(--neutral-300);
+  --text-primary:var(--neutral-900); --text-secondary:var(--neutral-600); --text-tertiary:var(--neutral-500);
+  --text-inverse:var(--neutral-0); --text-brand:var(--primary-500);
+  --action-primary:var(--primary-500); --action-primary-hover:var(--primary-600); --action-primary-subtle:var(--primary-50);
+  --action-on-primary:var(--neutral-0); --action-outline:var(--primary-500); --action-ghost-hover:var(--neutral-100);
+  --action-disabled:var(--neutral-200); --action-disabled-text:var(--neutral-400);
+  --status-success:var(--success-500); --status-success-subtle:var(--success-50); --status-success-text:var(--success-700);
+  --status-warning:var(--warning-500); --status-warning-subtle:var(--warning-50); --status-warning-text:var(--warning-700);
+  --status-danger:var(--error-600); --status-danger-subtle:var(--error-50); --status-danger-text:var(--error-700);
 
-  <!-- PRINCIPLES -->
-  <section style="margin-top:8px">
-    <div class="sec-label">01 — Principles</div>
-    <h2>Design Principles</h2>
-    <p class="note">Three rules that make this system Duescape — not just any fintech. Every component below exists to serve one of them.</p>
-    <div class="grid princ">
-      <div class="princ-card">
-        <div class="p-mark">Clarity First</div>
-        <p>The most important information is visible without interaction.</p>
-        <div class="p-link">In the system: the gradient Balance Card opens every screen — total, active count and next payment in one glance, zero taps.</div>
-      </div>
-      <div class="princ-card">
-        <div class="p-mark">Action Over Analysis</div>
-        <p>Recommendations should suggest what to do, not only what happened.</p>
-        <div class="p-link">In the system: Subscription Actions tiles, Smart Suggestion with a concrete saving amount, Pause / Cancel / Save changes controls.</div>
-      </div>
-      <div class="princ-card">
-        <div class="p-mark">Familiar by Default</div>
-        <p>Interactions follow native mobile patterns.</p>
-        <div class="p-link">In the system: iOS-style toggle, bottom tab bar, chevron settings rows, horizontally scrolling category icons.</div>
-      </div>
-    </div>
-  </section>
-
-  <!-- COLORS -->
-  <section>
-    <div class="sec-label">02 — Color</div>
-    <h2>Palette</h2>
-    <p class="note">Switch the theme above — surfaces and text adapt, brand colors stay stable. This is the Light / Dark logic from the mockups expressed as tokens. The card gradient runs #3D7BFF → #1D5CF2 → #1648C8 at 135°.</p>
-    <div class="grid colors" id="swatches"></div>
-  </section>
-
-  <!-- TYPOGRAPHY -->
-  <section>
-    <div class="sec-label">03 — Typography</div>
-    <h2>Type scale</h2>
-    <p class="note">Typeface: Inter (SF Pro on iOS). Amounts use tabular figures so values don't jump. Dates inside list rows are links-colored blue — a recurring Duescape pattern.</p>
-    <div class="type-table">
-      <div class="type-row"><div class="type-spec">Display / 28 / 800<br>letter-spacing −2%</div><div class="t-display">€ 248,30</div></div>
-      <div class="type-row"><div class="type-spec">H2 Section / 18 / 700</div><div class="t-h2">Subscription actions</div></div>
-      <div class="type-row"><div class="type-spec">Card title / 15 / 600</div><div class="t-card">Billing history</div></div>
-      <div class="type-row"><div class="type-spec">Label / 11 / 700<br>uppercase, ls +9%</div><div class="t-label">Monthly total</div></div>
-      <div class="type-row"><div class="type-spec">Body / 14 / 400</div><div class="t-body">Active monthly commitments</div></div>
-      <div class="type-row"><div class="type-spec">Caption / 12 / 400</div><div class="t-caption">Notify 2 days before charge</div></div>
-      <div class="type-row"><div class="type-spec">Numeric / 15 / 700<br>tabular-nums</div><div class="t-num">€12.99</div></div>
-      <div class="type-row"><div class="type-spec">Inline link / 12 / 600<br>blue-500</div><div class="t-link">Next Payment: 12 Apr</div></div>
-    </div>
-  </section>
-
-  <!-- GEOMETRY -->
-  <section>
-    <div class="sec-label">04 — Geometry</div>
-    <h2>Radius &amp; spacing</h2>
-    <div class="geo" style="margin-bottom:26px">
-      <div class="g" style="border-radius:16px;width:124px">cards<br>r-16</div>
-      <div class="g" style="border-radius:14px;width:124px">tiles<br>r-14</div>
-      <div class="g" style="border-radius:12px;width:124px">inputs / CTA<br>r-12</div>
-      <div class="g" style="border-radius:999px;width:124px">pills / chips<br>r-full</div>
-    </div>
-    <div class="sp-row">
-      <div class="sp-cell"><div class="sp" style="width:4px;height:4px"></div><div>4</div></div>
-      <div class="sp-cell"><div class="sp" style="width:8px;height:8px"></div><div>8</div></div>
-      <div class="sp-cell"><div class="sp" style="width:12px;height:12px"></div><div>12</div></div>
-      <div class="sp-cell"><div class="sp" style="width:16px;height:16px"></div><div>16</div></div>
-      <div class="sp-cell"><div class="sp" style="width:20px;height:20px"></div><div>20</div></div>
-      <div class="sp-cell"><div class="sp" style="width:24px;height:24px"></div><div>24</div></div>
-      <div class="sp-cell"><div class="sp" style="width:32px;height:32px"></div><div>32</div></div>
-    </div>
-    <p class="note" style="margin-top:14px">Base unit — 4px. Card padding: 16–20. Section gap: 24–32. Two button shapes coexist: block CTAs ("Save changes") use r-12; inline quick actions ("Pause", "Delete") use pills.</p>
-  </section>
-
-  <!-- COMPONENTS -->
-  <section>
-    <div class="sec-label">05 — Components</div>
-    <h2>Live components</h2>
-    <div class="grid comp-grid">
-
-      <div class="comp">
-        <h3>Balance card (gradient)</h3>
-        <div class="balance">
-          <div class="chip-ic"></div>
-          <div class="label">Monthly total</div>
-          <div class="amt">€ 248,30</div>
-          <div class="sub">6 active subscriptions</div>
-          <div class="sub" style="margin-top:10px">Next payment:</div>
-          <div class="next">Netflix · Apr 12</div>
-          <div class="mc"><i></i><i></i></div>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Action tiles</h3>
-        <div class="tiles">
-          <div class="tile"><div class="ic">＋</div><span>Add subscription</span></div>
-          <div class="tile"><div class="ic">⇣</div><span>Import subscriptions</span></div>
-          <div class="tile"><div class="ic">🔔</div><span>Manage reminders</span></div>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Category icons</h3>
-        <div class="cats">
-          <div class="cat"><div class="ic" style="background:#E53935">▶</div><span>Streaming</span></div>
-          <div class="cat"><div class="ic" style="background:#1D5CF2">⚙</div><span>Software</span></div>
-          <div class="cat"><div class="ic" style="background:#0E1320">☁</div><span>Cloud</span></div>
-          <div class="cat"><div class="ic" style="background:#2F6BFF">📊</div><span>Finance</span></div>
-          <div class="cat"><div class="ic" style="background:#101728">🎮</div><span>Games</span></div>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Upcoming payments — list rows</h3>
-        <div class="row">
-          <div class="l"><div class="brand" style="background:#0E1320">N</div><div><div class="nm">Netflix</div><div class="sub">Next Payment: <b>12 Apr</b></div></div></div>
-          <span class="t-num">€12.99</span>
-        </div>
-        <div class="row">
-          <div class="l"><div class="brand" style="background:#0E2A66">P</div><div><div class="nm">Paypal</div><div class="sub">Next Payment: <b>14 Apr</b></div></div></div>
-          <span class="t-num">€10.00</span>
-        </div>
-        <div class="row">
-          <div class="l"><div class="brand" style="background:#1DB954">S</div><div><div class="nm">Spotify</div><div class="sub">Next Payment: <b>20 Apr</b></div></div></div>
-          <span class="t-num">€12.99</span>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Info chips</h3>
-        <div class="btn-row">
-          <div class="info-chip chip-mint"><small>Billing cycle</small>Monthly</div>
-          <div class="info-chip chip-green"><small>Billing status</small>Active</div>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Settings rows</h3>
-        <div class="set-row">
-          <div class="l"><div class="set-ic" style="background:var(--mint-100)">⏸</div><span class="nm">Pause reminders</span></div>
-          <span class="chev">›</span>
-        </div>
-        <div class="set-row">
-          <div class="l"><div class="set-ic" style="background:var(--red-100)">✕</div><span class="nm">Cancel subscription</span></div>
-          <div class="toggle" onclick="this.classList.toggle('on')"><i></i></div>
-        </div>
-        <div class="set-row">
-          <div class="l"><div class="set-ic" style="background:var(--blue-100)">📅</div><span class="nm">Change billing date</span></div>
-          <div class="toggle on" onclick="this.classList.toggle('on')"><i></i></div>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Buttons</h3>
-        <div class="btn-row" style="margin-bottom:12px">
-          <button class="btn btn-primary btn-pill">View case</button>
-          <button class="btn btn-danger btn-pill">Delete</button>
-          <button class="btn btn-ghost btn-pill">Pause</button>
-        </div>
-        <button class="btn btn-primary btn-block">Save changes</button>
-      </div>
-
-      <div class="comp">
-        <h3>Badges</h3>
-        <div class="btn-row">
-          <span class="badge badge-active">Active</span>
-          <span class="badge badge-soft-green">On track</span>
-          <span class="badge badge-soft-red">Overdue</span>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Search + filter chips</h3>
-        <div class="search">⌕&nbsp; Search subscriptions</div>
-        <div class="chips" style="margin-top:12px">
-          <button class="chip-f sel">Monthly</button>
-          <button class="chip-f">Yearly</button>
-          <button class="chip-f">Trials</button>
-          <button class="chip-f">Active</button>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Bottom navigation</h3>
-        <div class="bnav">
-          <i class="on">⌂</i><i>◎</i><i>☺</i><i>📈</i><i>⊞</i>
-        </div>
-      </div>
-
-      <div class="comp">
-        <h3>Bar chart</h3>
-        <div class="label" style="margin-bottom:4px">Monthly trend</div>
-        <div class="bars">
-          <div class="bar"><i style="height:34%"></i><span>Aug</span></div>
-          <div class="bar"><i style="height:42%"></i><span>Sep</span></div>
-          <div class="bar"><i style="height:38%"></i><span>Oct</span></div>
-          <div class="bar"><i style="height:55%"></i><span>Nov</span></div>
-          <div class="bar"><i style="height:78%"></i><span>Dec</span></div>
-          <div class="bar"><i style="height:64%"></i><span>Jan</span></div>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- ICONOGRAPHY -->
-  <section>
-    <div class="sec-label">06 — Iconography</div>
-    <h2>Icons</h2>
-    <p class="note">Line icons, single stroke weight — matching the mockups. Recommended set: Lucide / Feather (web) or SF Symbols Regular (iOS). Icons inherit text color via currentColor, so they adapt to both themes automatically.</p>
-    <div class="icon-grid">
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M3 10.5 12 3l9 7.5"/><path d="M5 9.5V21h14V9.5"/></svg><span>home</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M12 5v14M5 12h14"/></svg><span>add</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M12 3v12m0 0-4-4m4 4 4-4"/><path d="M4 17v3h16v-3"/></svg><span>import</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M18 8a6 6 0 1 0-12 0c0 7-3 8-3 8h18s-3-1-3-8"/><path d="M10 21h4"/></svg><span>bell</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><circle cx="11" cy="11" r="7"/><path d="m21 21-4.3-4.3"/></svg><span>search</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="M4 20V10m6 10V4m6 16v-7"/></svg><span>stats</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M4 9h16M8 3v4m8-4v4"/></svg><span>calendar</span></div>
-      <div class="icon-cell"><svg viewBox="0 0 24 24"><path d="m9 6 6 6-6 6"/></svg><span>chevron</span></div>
-    </div>
-    <div class="icon-rules">
-      <div class="icon-rule"><b>Stroke &amp; size</b>Stroke 1.5–2px, rounded caps and joins. Three sizes: 16 (inline), 20 (rows), 24 (navigation, tiles).</div>
-      <div class="icon-rule"><b>Containers</b>Category icons sit in 44px tiles (r-12) on solid brand colors, white glyph. Settings icons sit in 30px tiles (r-8) on soft semantic fills.</div>
-      <div class="icon-rule"><b>Color</b>Default icons use text-1 / text-3; the active nav tab uses blue-600. Never mix filled and outlined styles in one surface.</div>
-    </div>
-  </section>
-
-  <!-- COMPONENT IN CONTEXT -->
-  <section>
-    <div class="sec-label">07 — Component in Context</div>
-    <h2>Components in context</h2>
-    <p class="note">Not just "button, badge, toggle" — the role each component plays on the Dashboard. Numbers on the mock map to the cards on the right; each one answers "why does this component exist".</p>
-    <div class="ctx">
-
-      <div class="phone" aria-label="Dashboard screen">
-        <div class="greet">
-          <div><small>Good evening, <b>Alex</b></small><div class="ttl">Duescape</div></div>
-          <div class="ava"></div>
-        </div>
-
-        <div class="pcard bal"><span class="mk">1</span>
-          <div class="balance">
-            <div class="chip-ic"></div>
-            <div class="label">Monthly total</div>
-            <div class="amt" style="font-size:22px">€ 248,30</div>
-            <div class="sub">6 active subscriptions</div>
-            <div class="sub" style="margin-top:8px">Next payment:</div>
-            <div class="next" style="font-size:12.5px">Netflix · Apr 12</div>
-            <div class="mc"><i></i><i></i></div>
-          </div>
-        </div>
-
-        <div class="pcard hl"><span class="mk">2</span>
-          <div class="label" style="margin-bottom:10px">Subscription actions</div>
-          <div class="tiles">
-            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">＋</div><span style="font-size:10px">Add</span></div>
-            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">⇣</div><span style="font-size:10px">Import</span></div>
-            <div class="tile" style="padding:10px 4px"><div class="ic" style="width:28px;height:28px;font-size:13px">🔔</div><span style="font-size:10px">Reminders</span></div>
-          </div>
-        </div>
-
-        <div class="pcard dim">
-          <div class="label" style="margin-bottom:6px">Upcoming payments</div>
-          <div class="row" style="padding:8px 0">
-            <div class="l"><div class="brand" style="background:#0E1320;width:30px;height:30px;font-size:13px">N</div><div><div class="nm" style="font-size:13px">Netflix</div><div class="sub">Next Payment: <b>12 Apr</b></div></div></div>
-            <span class="t-num" style="font-size:13px">€12.99</span>
-          </div>
-        </div>
-
-        <div class="pcard hl" style="padding:10px 12px"><span class="mk">3</span>
-          <div class="bnav" style="border:0;padding:4px 0;background:transparent">
-            <i class="on">⌂</i><i>◎</i><i>☺</i><i>📈</i><i>⊞</i>
-          </div>
-        </div>
-      </div>
-
-      <div class="ctx-notes">
-        <div class="ctx-note">
-          <div class="head"><span class="n">1</span><h3>Monthly Total Card</h3></div>
-          <p>The Monthly Total card is the primary entry point to spending awareness. It answers "how much am I spending?" in under a second: total → active count → next payment, with zero taps. The gradient and card-chip visuals borrow the language of a physical bank card, so the number reads as money, not as a statistic.</p>
-          <span class="pr">Clarity First</span>
-        </div>
-        <div class="ctx-note">
-          <div class="head"><span class="n">2</span><h3>Subscription Actions</h3></div>
-          <p>Three tiles sit directly under the total — the answer to the number above them. The dashboard never shows a problem without an exit: add, import, or manage reminders is always one tap away. Insight and action live on the same screen.</p>
-          <span class="pr">Action Over Analysis</span>
-        </div>
-        <div class="ctx-note">
-          <div class="head"><span class="n">3</span><h3>Bottom Tab Bar</h3></div>
-          <p>A standard five-tab bottom navigation with the active tab in brand blue. No custom navigation metaphors where a native pattern exists — users already know how to move around before they open the app for the first time.</p>
-          <span class="pr">Familiar by Default</span>
-        </div>
-      </div>
-
-    </div>
-  </section>
-
-  <!-- CODE -->
-  <section>
-    <div class="sec-label">08 — Developer tokens</div>
-    <h2>CSS variables</h2>
-<pre id="cssTokens">:root {
-  /* Brand */
-  --blue-600: #1D5CF2;   /* primary */
-  --blue-500: #2F6BFF;   /* links, accents, dates */
-  --blue-400: #3D7BFF;   /* gradient start */
-  --blue-100: #DCE7FF;
-  --grad-card: linear-gradient(135deg,#3D7BFF 0%,#1D5CF2 60%,#1648C8 100%);
-
-  /* Semantic */
-  --green-500: #3FBF7F;  /* active / success */
-  --mint-100:  #DDF7EE;  /* info chip bg */
-  --red-500:   #D93A2F;  /* destructive */
-
-  /* Light theme */
-  --bg:        #F1F3F8;
-  --surface:   #FFFFFF;
-  --surface-2: #F4F6FA;
-  --border:    #E6E9F0;
-  --text-1:    #0E1320;
-  --text-2:    #6E7891;
-  --text-3:    #9AA3B5;
-
-  /* Geometry */
-  --r-card: 16px;  --r-tile: 14px;  --r-input: 12px;
-  --r-btn: 12px;   --r-pill: 999px;
-  /* Spacing: 4 / 8 / 12 / 16 / 20 / 24 / 32 */
+  --r-xs:6px; --r-sm:8px; --r-md:10px; --r-lg:12px; --r-tile:14px; --r-card:16px; --r-xl:20px; --r-pill:999px;
+  --sans:"Plus Jakarta Sans",-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+  --mono:"JetBrains Mono",ui-monospace,SFMono-Regular,Menlo,Consolas,monospace;
+  --page-ink:var(--neutral-900);
 }
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg-canvas:var(--ink-400); --bg-surface:var(--ink-300); --bg-raised:var(--ink-200); --bg-sunken:var(--ink-500);
+    --border-default:var(--ink-100); --border-strong:var(--neutral-700);
+    --text-primary:var(--neutral-50); --text-secondary:var(--neutral-300); --text-tertiary:var(--neutral-400);
+    --text-inverse:var(--neutral-900); --text-brand:var(--primary-300);
+    --action-primary-hover:var(--primary-400); --action-primary-subtle:var(--ink-200); --action-outline:var(--primary-400);
+    --action-ghost-hover:var(--ink-200); --action-disabled:var(--ink-100); --action-disabled-text:var(--neutral-600);
+    --status-success-subtle:var(--ink-200); --status-success-text:var(--success-500);
+    --status-warning-subtle:var(--ink-200); --status-warning-text:var(--warning-500);
+    --status-danger-subtle:var(--ink-200); --status-danger-text:var(--error-500);
+    --page-ink:var(--neutral-50);
+  }
+}
+:root[data-theme="dark"]{
+  --bg-canvas:var(--ink-400); --bg-surface:var(--ink-300); --bg-raised:var(--ink-200); --bg-sunken:var(--ink-500);
+  --border-default:var(--ink-100); --border-strong:var(--neutral-700);
+  --text-primary:var(--neutral-50); --text-secondary:var(--neutral-300); --text-tertiary:var(--neutral-400);
+  --text-inverse:var(--neutral-900); --text-brand:var(--primary-300);
+  --action-primary-hover:var(--primary-400); --action-primary-subtle:var(--ink-200); --action-outline:var(--primary-400);
+  --action-ghost-hover:var(--ink-200); --action-disabled:var(--ink-100); --action-disabled-text:var(--neutral-600);
+  --status-success-subtle:var(--ink-200); --status-success-text:var(--success-500);
+  --status-warning-subtle:var(--ink-200); --status-warning-text:var(--warning-500);
+  --status-danger-subtle:var(--ink-200); --status-danger-text:var(--error-500);
+  --page-ink:var(--neutral-50);
+}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg-canvas);color:var(--text-secondary);font-family:var(--sans);font-size:15px;line-height:1.6;-webkit-font-smoothing:antialiased}
+h1,h2,h3,h4{color:var(--text-primary);margin:0;text-wrap:balance;letter-spacing:-.02em}
+h1{font-size:clamp(30px,5vw,44px);font-weight:800;line-height:1.1}
+h2{font-size:23px;font-weight:800}
+h3{font-size:16px;font-weight:700;letter-spacing:0}
+a{color:var(--text-brand)}
+code,.mono{font-family:var(--mono);font-size:.85em}
+.eyebrow{font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-tertiary)}
 
-[data-theme="dark"] {
-  --bg:        #0A0D16;
-  --surface:   #121624;
-  --surface-2: #1A1F30;
-  --border:    #232940;
-  --text-1:    #F5F7FA;
-  --text-2:    #8A94A8;
-  --text-3:    #5E6678;
-}</pre>
-    <p class="copy-hint">Copy the block above into your project — every component on this page is built from these same variables.</p>
-  </section>
+.shell{display:grid;grid-template-columns:238px minmax(0,1fr);gap:48px;max-width:1260px;margin:0 auto;padding:0 20px}
+.rail{position:sticky;top:env(safe-area-inset-top,0px);align-self:start;padding-block:40px;max-height:100vh;overflow-y:auto}
+.rail nav{display:flex;flex-direction:column;gap:2px;margin-top:18px}
+.rail a{display:block;padding:6px 10px;border-radius:var(--r-sm);color:var(--text-secondary);text-decoration:none;font-size:13.5px;font-weight:500}
+.rail a:hover{background:var(--action-ghost-hover);color:var(--text-primary)}
+.rail .sep{margin-top:14px;padding:6px 10px 2px;font-size:10px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-tertiary)}
+.main{padding-block:40px 96px;min-width:0}
+section{padding-block:40px;border-top:1px solid var(--border-default)}
+section:first-of-type{border-top:0;padding-top:0}
+.lede{max-width:66ch;color:var(--text-secondary)}
 
-  <!-- FOOTER -->
-  <footer>
-    <div class="made">Designed &amp; documented by <b>Tania Aisen</b> · Duescape Design System</div>
-    <div class="f-links">
-      <a class="f-link" href="https://voluntary-track-695014.framer.app" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M4 2h16v7h-8zm0 7h8l8 7H4zm0 7h8v6z"/></svg></span>
-        Portfolio
-      </a>
-      <a class="f-link" href="https://github.com/tanyaaisen07-uiux/duescape-design-system" target="_blank" rel="noopener">
-        <span class="ic"><svg viewBox="0 0 24 24"><path d="M12 .5C5.65.5.5 5.65.5 12c0 5.08 3.29 9.39 7.86 10.91.58.11.79-.25.79-.55v-2.17c-3.2.7-3.87-1.36-3.87-1.36-.52-1.33-1.28-1.68-1.28-1.68-1.04-.71.08-.7.08-.7 1.15.08 1.76 1.18 1.76 1.18 1.03 1.76 2.69 1.25 3.34.96.1-.74.4-1.25.72-1.54-2.55-.29-5.23-1.28-5.23-5.68 0-1.26.45-2.28 1.18-3.09-.12-.29-.51-1.46.11-3.05 0 0 .96-.31 3.15 1.18a10.9 10.9 0 0 1 5.74 0c2.19-1.49 3.15-1.18 3.15-1.18.62 1.59.23 2.76.11 3.05.74.81 1.18 1.83 1.18 3.09 0 4.41-2.69 5.38-5.25 5.67.41.35.77 1.04.77 2.1v3.12c0 .3.21.66.8.55A11.51 11.51 0 0 0 23.5 12C23.5 5.65 18.35.5 12 .5z"/></svg></span>
-        Source code
-      </a>
-    </div>
-  </footer>
+.masthead{display:flex;align-items:center;gap:12px;margin-bottom:16px}
+.mark{width:38px;height:38px;border-radius:12px;background:linear-gradient(135deg,var(--primary-300),var(--primary-600));display:grid;place-items:center;color:#fff;font-weight:800;font-size:18px;flex:none}
+.version{display:flex;flex-wrap:wrap;gap:8px 18px;margin-top:20px;font-family:var(--mono);font-size:12px;color:var(--text-tertiary)}
+.version b{color:var(--text-primary);font-weight:500}
 
+.ramp{display:flex;flex-wrap:wrap;gap:10px;margin-top:16px}
+.chipcol{width:96px}
+.chipcol .sw{height:52px;border-radius:var(--r-md);border:1px solid var(--border-default)}
+.chipcol .nm{font-size:11px;font-weight:600;color:var(--text-primary);margin-top:6px}
+.chipcol .vl{font-family:var(--mono);font-size:10.5px;color:var(--text-tertiary)}
+
+.tablewrap{overflow-x:auto;margin-top:18px}
+table{width:100%;border-collapse:collapse;font-size:13.5px;min-width:620px}
+th{text-align:left;font-size:11px;font-weight:600;letter-spacing:.09em;text-transform:uppercase;color:var(--text-tertiary);padding:0 12px 10px 0;border-bottom:1px solid var(--border-default)}
+td{padding:9px 12px 9px 0;border-bottom:1px solid var(--border-default);vertical-align:middle}
+td.tok{font-family:var(--mono);color:var(--text-primary);white-space:nowrap}
+.dot{display:inline-block;width:20px;height:20px;border-radius:6px;border:1px solid var(--border-default);vertical-align:-5px;margin-right:8px}
+.ratio{font-family:var(--mono);font-variant-numeric:tabular-nums;color:var(--text-secondary)}
+.pass{color:var(--status-success-text);font-weight:600}
+
+.typerow{display:grid;grid-template-columns:230px minmax(0,1fr);gap:24px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--border-default)}
+.typerow .spec{font-family:var(--mono);font-size:11px;color:var(--text-tertiary)}
+.typerow .sample{color:var(--text-primary);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.typerow .use{grid-column:1/-1;font-size:11.5px;color:var(--text-tertiary);margin-top:-4px}
+
+.grid{display:grid;gap:20px;grid-template-columns:repeat(auto-fit,minmax(272px,1fr));margin-top:20px}
+.panel{background:var(--bg-surface);border:1px solid var(--border-default);border-radius:var(--r-card);padding:20px}
+.panel h3{margin-bottom:4px}
+.panel p.d{margin:0 0 14px;font-size:12.5px;color:var(--text-tertiary)}
+.panel .vars{font-family:var(--mono);font-size:10.5px;color:var(--text-tertiary);margin-top:12px}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center}
+
+.btn{font-family:var(--sans);font-size:14px;font-weight:600;padding:13px 20px;border-radius:var(--r-lg);border:1px solid transparent;cursor:pointer;line-height:1.5}
+.btn-primary{background:var(--action-primary);color:var(--action-on-primary)}
+.btn-primary:hover{background:var(--action-primary-hover)}
+.btn-secondary{background:transparent;color:var(--text-brand);border-color:var(--action-outline)}
+.btn-secondary:hover{background:var(--action-primary-subtle)}
+.btn-ghost{background:transparent;color:var(--text-primary)}
+.btn-ghost:hover{background:var(--action-ghost-hover)}
+.btn-destructive{background:var(--status-danger);color:#fff}
+.btn:disabled{background:var(--action-disabled);color:var(--action-disabled-text);border-color:transparent;cursor:not-allowed}
+
+.pillchip{font-size:13px;font-weight:600;padding:8px 16px;border-radius:var(--r-pill);border:1px solid var(--border-default);background:transparent;color:var(--text-secondary);cursor:pointer;font-family:var(--sans)}
+.pillchip[aria-pressed="true"]{background:var(--action-primary);color:var(--action-on-primary);border-color:transparent}
+.pillchip:disabled{color:var(--action-disabled-text);border-color:var(--action-disabled);cursor:not-allowed}
+
+.badge{display:inline-flex;align-items:center;gap:4px;font-size:11px;font-weight:600;padding:4px 10px 4px 8px;border-radius:var(--r-pill)}
+.badge svg{width:13px;height:13px;flex:none}
+.b-active{background:var(--status-success-subtle);color:var(--status-success-text)}
+.b-trial{background:var(--action-primary-subtle);color:var(--text-brand)}
+.b-paused{background:var(--status-warning-subtle);color:var(--status-warning-text)}
+.b-cancelled{background:var(--bg-raised);color:var(--text-tertiary)}
+.b-expired{background:var(--bg-raised);color:var(--text-secondary)}
+.b-failed,.b-overdue{background:var(--status-danger-subtle);color:var(--status-danger-text)}
+
+.switch{width:44px;height:24px;border-radius:var(--r-pill);background:var(--border-strong);border:0;padding:2px;display:flex;cursor:pointer}
+.switch span{width:20px;height:20px;border-radius:50%;background:var(--bg-surface);box-shadow:0 1px 2px rgba(0,0,0,.18);transition:transform .16s ease}
+.switch[aria-checked="true"]{background:var(--action-primary)}
+.switch[aria-checked="true"] span{transform:translateX(20px)}
+.cbox{width:20px;height:20px;border-radius:var(--r-xs);border:1.5px solid var(--border-strong);background:transparent;display:grid;place-items:center;cursor:pointer;padding:0}
+.cbox[aria-checked="true"]{background:var(--action-primary);border-color:var(--action-primary)}
+.cbox svg{opacity:0}
+.cbox[aria-checked="true"] svg{opacity:1}
+
+.field{display:flex;flex-direction:column;gap:6px;margin-bottom:14px}
+.field .lab{font-size:12px;font-weight:500;color:var(--text-secondary)}
+.field .box{display:flex;align-items:center;gap:10px;padding:13px 14px;border:1px solid var(--border-default);border-radius:var(--r-lg);background:var(--bg-surface);color:var(--text-tertiary);font-size:15px}
+.field .box.filled{color:var(--text-primary)}
+.field .box.focus{border-color:var(--action-outline);border-width:1.5px;color:var(--text-primary)}
+.field .box.err{border-color:var(--status-danger)}
+.field .box.dis{background:var(--bg-raised);border-color:var(--action-disabled);color:var(--action-disabled-text)}
+.field .help{font-size:12px;color:var(--status-danger-text)}
+.field .box svg{margin-left:auto;color:var(--text-tertiary)}
+
+.srow{display:flex;align-items:center;gap:12px;padding:13px 0;border-top:1px solid var(--border-default)}
+.srow:first-of-type{border-top:0}
+.srow .nm{font-size:15px;font-weight:500;color:var(--text-primary)}
+.srow .val{font-size:14px;color:var(--text-tertiary)}
+.srow .dan{color:var(--status-danger-text)}
+
+.subrow{display:flex;align-items:center;gap:12px;padding:12px 0;border-top:1px solid var(--border-default)}
+.subrow:first-of-type{border-top:0}
+.logo{width:40px;height:40px;border-radius:var(--r-lg);display:grid;place-items:center;color:#fff;font-weight:700;font-size:16px;flex:none}
+.subrow .nm{font-size:15px;font-weight:600;color:var(--text-primary)}
+.subrow .mt{font-size:12px;color:var(--text-tertiary)}
+.amt{font-size:15px;font-weight:700;color:var(--text-primary);font-variant-numeric:tabular-nums}
+
+.track{height:6px;border-radius:var(--r-pill);background:var(--border-default);overflow:hidden}
+.track i{display:block;height:100%;width:62%;background:var(--action-primary);border-radius:var(--r-pill)}
+.iconset{display:flex;flex-wrap:wrap;gap:16px;color:var(--text-primary)}
+.iconset figure{margin:0;display:grid;justify-items:center;gap:6px;width:64px}
+.iconset figcaption{font-size:9.5px;color:var(--text-tertiary);text-align:center}
+.navbar{display:flex;justify-content:space-between;align-items:center;padding:10px 8px;border:1px solid var(--border-default);border-radius:var(--r-card);background:var(--bg-surface);margin-top:14px}
+.tab{display:flex;flex-direction:column;align-items:center;gap:4px;font-size:10px;font-weight:500;color:var(--text-tertiary);flex:1}
+.tab.on{color:var(--text-brand);font-weight:600}
+.tiles{display:flex;gap:12px;flex-wrap:wrap}
+.tile{width:44px;height:44px;border-radius:var(--r-lg);display:grid;place-items:center;color:#fff}
+.skel{height:12px;border-radius:6px;background:var(--border-default);margin-bottom:10px}
+.dialog{border:1px solid var(--border-default);border-radius:var(--r-card);background:var(--bg-surface);padding:20px;box-shadow:0 12px 32px rgba(0,0,0,.18)}
+.toast{display:flex;align-items:center;gap:10px;padding:12px 14px;border:1px solid var(--border-default);border-radius:var(--r-lg);background:var(--bg-surface);box-shadow:0 12px 32px rgba(0,0,0,.14);font-size:13px;font-weight:500;color:var(--text-primary)}
+.toast b{margin-left:auto;color:var(--text-brand);font-weight:700}
+.state{text-align:center;padding:22px 8px}
+.state .ic{width:60px;height:60px;border-radius:var(--r-pill);display:grid;place-items:center;margin:0 auto 12px}
+.state h4{font-size:17px;font-weight:700;color:var(--text-primary);margin:0 0 6px}
+.state p{margin:0 0 14px;font-size:13px;color:var(--text-secondary)}
+
+pre{background:var(--bg-sunken);border:1px solid var(--border-default);border-radius:var(--r-lg);padding:16px;overflow-x:auto;margin-top:18px}
+pre code{font-size:12px;line-height:1.7;color:var(--text-secondary)}
+.note{border-left:3px solid var(--action-primary);padding:2px 0 2px 16px;margin-top:20px;color:var(--text-secondary);max-width:66ch}
+.changed{border-left:3px solid var(--status-warning);padding:2px 0 2px 16px;margin-top:20px;color:var(--text-secondary);max-width:66ch}
+footer{padding-block:32px 8px;border-top:1px solid var(--border-default);color:var(--text-tertiary);font-size:13px}
+:focus-visible{outline:2px solid var(--action-outline);outline-offset:2px;border-radius:4px}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+@media (max-width:880px){
+  .shell{grid-template-columns:minmax(0,1fr);gap:0}
+  .rail{position:static;max-height:none;padding-block:32px 0}
+  .rail nav{flex-direction:row;flex-wrap:wrap;gap:4px}
+  .rail .sep{width:100%}
+  .typerow{grid-template-columns:minmax(0,1fr);gap:4px}
+}
+</style>
+
+<div class="shell">
+  <aside class="rail">
+    <div class="masthead"><div class="mark">D</div><strong style="font-size:15px;color:var(--text-primary)">Duescape</strong></div>
+    <nav>
+      <span class="sep">Foundations</span>
+      <a href="#about">What this is</a>
+      <a href="#primitives">Primitive colour</a>
+      <a href="#semantic">Semantic colour</a>
+      <a href="#type">Typography</a>
+      <a href="#space">Spacing &amp; radius</a>
+      <a href="#data">Data &amp; formatting</a>
+      <span class="sep">Library</span>
+      <a href="#actions">Actions</a>
+      <a href="#status">Status</a>
+      <a href="#forms">Forms</a>
+      <a href="#lists">Lists &amp; rows</a>
+      <a href="#surfaces">Cards &amp; charts</a>
+      <a href="#overlays">Overlays</a>
+      <a href="#states">Empty, error, loading</a>
+      <a href="#nav">Icons &amp; navigation</a>
+      <span class="sep">Rules</span>
+      <a href="#a11y">Accessibility</a>
+      <a href="#motion">Motion</a>
+      <a href="#dev">Developer tokens</a>
+    </nav>
+  </aside>
+
+  <main class="main">
+    <section id="about">
+      <h1>Duescape system reference</h1>
+      <p class="lede" style="margin-top:14px">The working specification for Duescape, a subscription tracker that tells people what to cancel rather than only what they pay. Every value on this page is taken from the Figma variables, so the file and this page cannot drift apart.</p>
+      <p class="version">
+        <span>Typeface <b>Plus Jakarta Sans</b></span>
+        <span>Brand <b>#0057FF</b></span>
+        <span>Artboard <b>393 × 852</b></span>
+        <span>Themes <b>Light · Dark</b></span>
+        <span>Contrast <b>WCAG AA</b></span>
+        <span>Components <b>36</b></span>
+      </p>
+      <div class="note">Two collections, two layers. <b>Duescape/Primitives</b> holds 58 raw values in a single mode. <b>Duescape/Semantic</b> holds 28 tokens in Light and Dark modes, each one an alias to a primitive. Product surfaces reference the semantic layer only, which is why switching a frame&rsquo;s mode retints an entire screen.</div>
+      <div class="changed"><b>Changed in this revision.</b> Navigation is five labelled tabs with no central action. Cancelling is a destructive button with a confirmation, never a toggle. Green is reserved for status and no longer doubles as a brand accent. Status badges carry a glyph as well as a tone. Currency is <code>€12,99</code> with a comma. The type ramp lost its near-duplicate steps and the status text tones were darkened to pass AA.</div>
+    </section>
+
+    <section id="primitives">
+      <h2>Primitive colour</h2>
+      <p class="lede">Raw values. Never referenced directly from a screen.</p>
+      <p class="eyebrow" style="margin-top:26px">Brand</p>
+      <div class="ramp" id="ramp-brand"></div>
+      <p class="eyebrow" style="margin-top:26px">Neutral · slate bias, so greys sit under a blue accent</p>
+      <div class="ramp" id="ramp-neutral"></div>
+      <p class="eyebrow" style="margin-top:26px">Ink · dark-theme surfaces, cooler and deeper than the slate ramp</p>
+      <div class="ramp" id="ramp-ink"></div>
+      <p class="eyebrow" style="margin-top:26px">Status · the 700 steps exist so status text clears AA on its own subtle ground</p>
+      <div class="ramp" id="ramp-status"></div>
+    </section>
+
+    <section id="semantic">
+      <h2>Semantic colour</h2>
+      <p class="lede">What a screen actually references. Each token resolves per theme; the alias column names the primitive it points at.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Token</th><th>Light</th><th>Dark</th><th>Role</th></tr></thead>
+          <tbody id="semtable"></tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="type">
+      <h2>Typography</h2>
+      <p class="lede">One family across the product, seventeen styles. Sizes are fixed, line height is a percentage, tracking tightens as size grows and opens up for uppercase labels.</p>
+      <div id="typeramp" style="margin-top:22px"></div>
+    </section>
+
+    <section id="space">
+      <h2>Spacing &amp; radius</h2>
+      <p class="lede">A 4px step. Card padding sits at 16, section gaps at 12 to 14, screen gutters at 20.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Spacing</th><th>Value</th><th>Radius</th><th>Value</th><th>Used on</th></tr></thead>
+          <tbody>
+            <tr><td class="tok">space/1</td><td class="mono">4px</td><td class="tok">radius/xs</td><td class="mono">6px</td><td>Checkbox</td></tr>
+            <tr><td class="tok">space/2</td><td class="mono">8px</td><td class="tok">radius/sm</td><td class="mono">8px</td><td>Small icon containers</td></tr>
+            <tr><td class="tok">space/3</td><td class="mono">12px</td><td class="tok">radius/md</td><td class="mono">10px</td><td>Icon tiles, swatches</td></tr>
+            <tr><td class="tok">space/4</td><td class="mono">16px</td><td class="tok">radius/lg</td><td class="mono">12px</td><td>Buttons, inputs, service marks</td></tr>
+            <tr><td class="tok">space/5</td><td class="mono">20px</td><td class="tok">radius/tile</td><td class="mono">14px</td><td>Quick action tiles</td></tr>
+            <tr><td class="tok">space/6</td><td class="mono">24px</td><td class="tok">radius/card</td><td class="mono">16px</td><td>Cards, dialogs, toasts</td></tr>
+            <tr><td class="tok">space/8</td><td class="mono">32px</td><td class="tok">radius/xl</td><td class="mono">20px</td><td>Bottom sheets</td></tr>
+            <tr><td class="tok">space/10</td><td class="mono">40px</td><td class="tok">radius/pill</td><td class="mono">999px</td><td>Chips, badges, toggle, avatar</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">Screen anatomy: fixed header, scrolling content, fixed tab bar or action footer. Page margin 20px, cards 353px wide inside it. The tab bar is 84px tall, of which 20px is home-indicator clearance.</div>
+    </section>
+
+    <section id="data">
+      <h2>Data &amp; formatting</h2>
+      <p class="lede">One locale across the product. Mixing formats inside a single view is the fastest way to make a finance product look untrustworthy.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Rule</th><th>Format</th><th>Example</th></tr></thead>
+          <tbody>
+            <tr><td>Currency</td><td>Symbol first, no space, comma decimal</td><td class="tok">€12,99</td></tr>
+            <tr><td>Thousands</td><td>Dot separator</td><td class="tok">€1.595,28</td></tr>
+            <tr><td>Date, full</td><td>Day, short month, year</td><td class="tok">12 Apr 2026</td></tr>
+            <tr><td>Date, in lists</td><td>Day and short month</td><td class="tok">12 Apr</td></tr>
+            <tr><td>Billing cycle</td><td>Monthly · Yearly · Weekly · Custom · Trial</td><td class="tok">€12,99 · Monthly</td></tr>
+            <tr><td>Yearly equivalent</td><td>Yearly amount, then monthly</td><td class="tok">€479,88 · Yearly ≈ €39,99 / month</td></tr>
+            <tr><td>Monthly total</td><td>Active monthly equivalents only</td><td class="tok">€132,94</td></tr>
+            <tr><td>Numerals</td><td>Tabular figures wherever amounts align</td><td class="tok">font-variant-numeric</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note">Demo dataset: Alex, 6 active subscriptions, <b>€132,94</b> per month, <b>€1.595,28</b> per year. Netflix €12,99 · Spotify Premium €10,99 · iCloud Storage €0,99 · Notion Plus €7,99 · Adobe Creative Cloud €59,99 · LinkedIn Premium €39,99. Every figure shown anywhere in the product derives from this set, so totals can be checked by adding the list.</div>
+    </section>
+
+    <section id="actions">
+      <h2>Actions</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Button</h3>
+          <p class="d">4 variants × 3 states. Destructive is a filled <code>error/600</code>, not a tint, so white sits on it at 4,63:1.</p>
+          <div class="row"><button class="btn btn-primary">Add subscription</button><button class="btn btn-secondary">Pause</button></div>
+          <div class="row" style="margin-top:10px"><button class="btn btn-ghost">Select</button><button class="btn btn-destructive">Cancel subscription</button><button class="btn btn-primary" disabled>Disabled</button></div>
+          <p class="vars">action/primary · action/primary-hover · action/outline · action/ghost-hover · status/danger · action/disabled</p>
+        </div>
+        <div class="panel">
+          <h3>Filter chip</h3>
+          <p class="d">Segmented filter for list views. Exactly one chip is Selected at a time.</p>
+          <div class="row">
+            <button class="pillchip" aria-pressed="true" id="chip-monthly">Monthly</button>
+            <button class="pillchip" aria-pressed="false" id="chip-yearly">Yearly</button>
+            <button class="pillchip" aria-pressed="false" id="chip-trials">Trials</button>
+            <button class="pillchip" aria-pressed="false" id="chip-all">All</button>
+            <button class="pillchip" disabled>Disabled</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Quick action</h3>
+          <p class="d">Home tile, 108px wide. Three fit a 393px screen with 12px gaps. Adding a subscription lives here, not in the tab bar.</p>
+          <div class="tiles" id="quickactions"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="status">
+      <h2>Status</h2>
+      <p class="lede">Seven lifecycle states. Each pairs a tone with its own glyph, so status is never carried by colour alone.</p>
+      <div class="grid">
+        <div class="panel">
+          <h3>Status badge</h3>
+          <p class="d">Subtle ground plus a darkened text tone keeps every pairing above 4,5:1 in both themes.</p>
+          <div class="row" id="badges"></div>
+        </div>
+        <div class="panel">
+          <h3>Toggle &amp; checkbox</h3>
+          <p class="d">Toggle is 44 × 24 with a 20px knob. Checkbox is 20 × 20 at <code>radius/xs</code>, drawn inside a 44px row.</p>
+          <div class="row" style="gap:18px">
+            <button class="switch" role="switch" aria-checked="true" id="sw-reminder" aria-label="Reminder"><span></span></button>
+            <button class="cbox" role="checkbox" aria-checked="true" id="cb-netflix" aria-label="Netflix"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 10.4 8.4 13.8 15 6.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+            <button class="cbox" role="checkbox" aria-checked="false" id="cb-spotify" aria-label="Spotify"><svg width="14" height="14" viewBox="0 0 20 20" fill="none"><path d="M5 10.4 8.4 13.8 15 6.6" stroke="#fff" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg></button>
+          </div>
+          <p class="vars">Never use a toggle for a destructive action. Cancelling a subscription is a button plus a confirmation.</p>
+        </div>
+        <div class="panel">
+          <h3>Progress</h3>
+          <p class="d">Usage indicator. Track <code>border/default</code>, fill <code>action/primary</code>.</p>
+          <div class="track" style="margin-top:22px"><i></i></div>
+          <div style="display:flex;justify-content:space-between;font-size:11px;color:var(--text-tertiary);margin-top:8px"><span>62% of usual month</span><span>€42,80 saved</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="forms">
+      <h2>Forms</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Text field</h3>
+          <p class="d">Five states. The error state shows the fix, never a code. The label sits above the box so it stays readable at large text sizes.</p>
+          <div class="field"><span class="lab">Subscription name</span><span class="box">e.g. Netflix</span></div>
+          <div class="field"><span class="lab">Subscription name</span><span class="box focus">Net</span></div>
+          <div class="field"><span class="lab">Subscription name</span><span class="box filled">Netflix</span></div>
+          <div class="field"><span class="lab">Price</span><span class="box err">0,00</span><span class="help">Enter a price above 0,00.</span></div>
+          <div class="field" style="margin-bottom:0"><span class="lab">Currency</span><span class="box dis">EUR (€)</span></div>
+        </div>
+        <div class="panel">
+          <h3>Select field</h3>
+          <p class="d">Opens a bottom sheet on tap. The chevron signals a sheet, the calendar glyph signals a date picker.</p>
+          <div class="field"><span class="lab">Billing cycle</span><span class="box">Select <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+          <div class="field"><span class="lab">Billing cycle</span><span class="box filled">Monthly <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="m6 9 6 6 6-6"/></svg></span></div>
+          <div class="field" style="margin-bottom:0"><span class="lab">Next billing date</span><span class="box err">Select <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/></svg></span><span class="help">Choose the next billing date.</span></div>
+        </div>
+        <div class="panel">
+          <h3>Settings row</h3>
+          <p class="d">Navigate opens a screen, Value shows the current setting, Toggle switches inline, Destructive is reserved for account removal.</p>
+          <div class="srow"><span class="nm" style="flex:1">Personal details</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="1.6" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></div>
+          <div class="srow"><span class="nm" style="flex:1">Currency</span><span class="val">EUR (€)</span><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="var(--text-tertiary)" stroke-width="1.6" stroke-linecap="round"><path d="m9 6 6 6-6 6"/></svg></div>
+          <div class="srow"><span class="nm" style="flex:1">Payment reminders</span><button class="switch" role="switch" aria-checked="true" id="sw-set" aria-label="Payment reminders"><span></span></button></div>
+          <div class="srow"><span class="nm dan" style="flex:1">Delete account</span></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="lists">
+      <h2>Lists &amp; rows</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Subscription row</h3>
+          <p class="d">Service mark, name, price and cycle, lifecycle badge. 64px tall, above the 44px touch minimum. Select mode prepends a checkbox.</p>
+          <div id="subrows"></div>
+        </div>
+        <div class="panel">
+          <h3>Payment row</h3>
+          <p class="d">Shared between upcoming charges and reminder settings. Upcoming ends in the amount, Reminder ends in a toggle.</p>
+          <div id="payrows"></div>
+        </div>
+        <div class="panel">
+          <h3>Billing history row</h3>
+          <p class="d">Date left, amount right, tabular figures so the column aligns.</p>
+          <div id="billrows"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="surfaces">
+      <h2>Cards &amp; charts</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Monthly total card</h3>
+          <p class="d">Home hero. Total, active count, yearly equivalent, single next charge. No budget limit: Duescape tracks commitments, it is not a budgeting tool.</p>
+          <p class="eyebrow">Monthly total</p>
+          <div style="font-size:32px;font-weight:800;letter-spacing:-.02em;color:var(--text-primary);margin:4px 0 2px">€132,94</div>
+          <div style="font-size:12px;color:var(--text-secondary)">6 active subscriptions · €1.595,28 per year</div>
+          <div style="display:flex;justify-content:space-between;border-top:1px solid var(--border-default);margin-top:12px;padding-top:10px;font-size:12px"><span style="color:var(--text-secondary)">Next payment</span><span style="font-weight:600;color:var(--text-primary)">Netflix · 12 Apr · €12,99</span></div>
+        </div>
+        <div class="panel">
+          <h3>Smart suggestion card</h3>
+          <p class="d">The product differentiator. Names what was detected, how long, what it costs, what pausing saves, and offers two actions. The only card allowed two buttons.</p>
+          <p class="eyebrow">Smart suggestion</p>
+          <div style="font-size:16px;font-weight:700;color:var(--text-primary);margin:6px 0 10px">You may not need Adobe Creative Cloud this month</div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0"><span style="color:var(--text-secondary)">Last used</span><span style="font-weight:600;color:var(--text-primary)">28 days ago</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0"><span style="color:var(--text-secondary)">Monthly cost</span><span style="font-weight:600;color:var(--text-primary)">€59,99</span></div>
+          <div style="display:flex;justify-content:space-between;font-size:13px;padding:3px 0 12px"><span style="color:var(--text-secondary)">Potential saving</span><span style="font-weight:600;color:var(--text-brand)">€59,99</span></div>
+          <div class="row"><button class="btn btn-primary">Pause for 30 days</button><button class="btn btn-ghost">Keep active</button></div>
+        </div>
+        <div class="panel">
+          <h3>Monthly trend</h3>
+          <p class="d">Six months of total recurring spend. One hue: past months in <code>primary/200</code>, the current month in <code>primary/500</code> with a direct label. Shared baseline, so heights compare.</p>
+          <div id="trend"></div>
+        </div>
+        <div class="panel" style="grid-column:1/-1">
+          <h3>Category breakdown</h3>
+          <p class="d">Share of the monthly total, ordered high to low. Single hue plus direct labels: identity comes from the label, never from colour, and the amounts let the percentages be checked.</p>
+          <div id="cats"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="overlays">
+      <h2>Overlays</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Confirmation dialog</h3>
+          <p class="d">The safe action sits left as Ghost, the committing action right. Body copy always says what Duescape does and what it does not do.</p>
+          <div class="dialog">
+            <h4 style="margin:0 0 8px;font-size:18px;font-weight:700;color:var(--text-primary)">Cancel Netflix?</h4>
+            <p style="margin:0 0 14px;font-size:13px;color:var(--text-secondary)">Duescape stops tracking this subscription and its history moves to Cancelled. Cancelling with Netflix itself is a separate step we will walk you through.</p>
+            <div class="row"><button class="btn btn-ghost" style="flex:1">Keep subscription</button><button class="btn btn-destructive" style="flex:1">Cancel subscription</button></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Bottom sheet</h3>
+          <p class="d">Grabber, title, single-select list. Dismiss by swipe or by tapping the scrim, which equals Cancel.</p>
+          <div class="dialog" style="border-radius:var(--r-xl) var(--r-xl) 0 0;padding-top:10px">
+            <div style="width:40px;height:4px;border-radius:2px;background:var(--border-strong);margin:0 auto 14px"></div>
+            <h4 style="margin:0 0 6px;font-size:17px;font-weight:700;color:var(--text-primary)">Theme</h4>
+            <div class="srow"><span class="nm" style="flex:1">Light</span></div>
+            <div class="srow"><span class="nm" style="flex:1">Dark</span></div>
+            <div class="srow"><span class="nm" style="flex:1">System</span><svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="var(--text-brand)" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><path d="M20 6 9 17l-5-5"/></svg></div>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Toast</h3>
+          <p class="d">Above the tab bar, one reversible action. Four seconds, or until dismissed when it reports an error.</p>
+          <div id="toasts"></div>
+        </div>
+      </div>
+    </section>
+
+    <section id="states">
+      <h2>Empty, error, loading</h2>
+      <div class="grid">
+        <div class="panel">
+          <h3>Empty state</h3>
+          <p class="d">Four contexts. Always names what will appear here and, where an action exists, offers it directly.</p>
+          <div class="state">
+            <div class="ic" style="background:var(--action-primary-subtle)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--text-brand)" stroke-width="1.6" stroke-linecap="round"><rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/></svg></div>
+            <h4>No subscriptions yet</h4>
+            <p>Add your first recurring payment to start tracking what you spend.</p>
+            <button class="btn btn-primary">Add subscription</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Error state</h3>
+          <p class="d">Says what failed, confirms nothing was charged or lost, offers the recovery action. Never shows a code.</p>
+          <div class="state">
+            <div class="ic" style="background:var(--status-danger-subtle)"><svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="var(--status-danger-text)" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4 2.7 20h18.6z"/><path d="M12 10v4M12 17.4v.2"/></svg></div>
+            <h4>We couldn&rsquo;t load your subscriptions</h4>
+            <p>Nothing was charged or changed. Check your connection and try again.</p>
+            <button class="btn btn-secondary">Try again</button>
+          </div>
+        </div>
+        <div class="panel">
+          <h3>Skeleton</h3>
+          <p class="d">Placeholders matching the shape of the content that replaces them. Preferred over spinners wherever the layout is predictable.</p>
+          <div class="skel" style="width:100%"></div>
+          <div class="skel" style="width:46%"></div>
+          <div style="display:flex;gap:12px;align-items:center;margin:16px 0">
+            <div style="width:40px;height:40px;border-radius:12px;background:var(--border-default);flex:none"></div>
+            <div style="flex:1"><div class="skel" style="width:60%"></div><div class="skel" style="width:38%;margin-bottom:0"></div></div>
+          </div>
+          <p class="vars">Spinners are allowed inside a button only.</p>
+        </div>
+      </div>
+    </section>
+
+    <section id="nav">
+      <h2>Icons &amp; navigation</h2>
+      <p class="lede">31 line icons on a 24px grid, 1,6px stroke, rounded caps and joins. Stroke inherits <code>currentColor</code>, so an icon takes the tone of whatever it sits in.</p>
+      <div class="panel" style="margin-top:20px"><div class="iconset" id="icons"></div></div>
+      <div class="grid">
+        <div class="panel">
+          <h3>Bottom navigation</h3>
+          <p class="d">Five sections, every one labelled. Adding a subscription is a task, not a place, so it lives in Home quick actions.</p>
+          <div class="navbar" id="navbar"></div>
+        </div>
+        <div class="panel">
+          <h3>Service mark</h3>
+          <p class="d">Placeholder monogram, 40px at <code>radius/lg</code>. Third-party brand marks are not redistributed in this file; the build swaps in licensed assets and falls back to the generic tile.</p>
+          <div class="tiles" id="logos"></div>
+        </div>
+        <div class="panel">
+          <h3>Category marker</h3>
+          <p class="d">44px tile. Fill is a primitive brand or status tone, the glyph is always white.</p>
+          <div class="tiles">
+            <div class="tile" style="background:var(--primary-500)"><svg width="22" height="22" viewBox="0 0 24 24"><path d="M9.5 8.2v7.6l6.2-3.8z" fill="#fff"/></svg></div>
+            <div class="tile" style="background:var(--primary-300)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M20 6 9 17l-5-5" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/></svg></div>
+            <div class="tile" style="background:var(--success-500)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><path d="M7 18h9.5a3.5 3.5 0 0 0 .3-7 5 5 0 0 0-9.6 1.2A3.4 3.4 0 0 0 7 18z" stroke="#fff" stroke-width="1.6" stroke-linejoin="round"/></svg></div>
+            <div class="tile" style="background:var(--warning-500)"><svg width="22" height="22" viewBox="0 0 24 24" fill="none"><rect x="3" y="6" width="18" height="12" rx="2" stroke="#fff" stroke-width="1.6"/><path d="M3 10h18" stroke="#fff" stroke-width="1.6"/></svg></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="a11y">
+      <h2>Accessibility</h2>
+      <p class="lede">Measured contrast for every text pairing the product uses. Six of these failed in the first draft and were fixed in the tokens rather than in the layouts, so the correction reached every screen at once.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Pairing</th><th>Theme</th><th>Ratio</th><th>AA</th></tr></thead>
+          <tbody id="a11ytable"></tbody>
+        </table>
+      </div>
+      <div class="note">Colour is never the only signal. Status badges carry a glyph, the current tab carries weight as well as tone, and chart identity comes from labels rather than hue. Touch targets are 44 × 44 minimum, including the 20px checkbox, which sits inside a 64px row. Disabled controls are exempt from the contrast minimum by the specification and are the only pairings below 4,5:1.</div>
+    </section>
+
+    <section id="motion">
+      <h2>Motion</h2>
+      <p class="lede">Fast for feedback, smooth for transitions, minimal around money.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Interaction</th><th>Duration</th><th>Curve</th><th>Note</th></tr></thead>
+          <tbody>
+            <tr><td>Button press</td><td class="mono">120ms</td><td class="mono">ease-out</td><td>Scale 0,98, no colour animation</td></tr>
+            <tr><td>Toggle</td><td class="mono">160ms</td><td class="mono">ease-out</td><td>Knob travels 20px</td></tr>
+            <tr><td>Screen push</td><td class="mono">280ms</td><td class="mono">ease-out</td><td>Back uses the same curve reversed</td></tr>
+            <tr><td>Tab switch</td><td class="mono">0ms</td><td class="mono">none</td><td>Changing section is not a journey</td></tr>
+            <tr><td>Dialog</td><td class="mono">180ms</td><td class="mono">ease-out</td><td>Dissolve behind a 55% ink scrim</td></tr>
+            <tr><td>Bottom sheet</td><td class="mono">240ms</td><td class="mono">ease-out</td><td>Slide up, swipe or scrim to dismiss</td></tr>
+            <tr><td>Toast</td><td class="mono">200 / 160ms</td><td class="mono">ease-out</td><td>Visible 4s</td></tr>
+            <tr><td>Amounts</td><td class="mono">none</td><td class="mono">none</td><td>Figures never count up on load</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section id="dev">
+      <h2>Developer tokens</h2>
+      <p class="lede">Drop-in custom properties. Application code references the semantic block; the primitive block exists so the semantic block has something to point at.</p>
+      <pre><code id="css"></code></pre>
+    </section>
+
+    <footer>Duescape design system · generated from the Figma variable collections <span class="mono">Duescape/Primitives</span> and <span class="mono">Duescape/Semantic</span> · 58 primitives, 28 semantic tokens, 17 type styles, 36 components.</footer>
+  </main>
 </div>
 
 <script>
-  function setTheme(t){
-    document.documentElement.setAttribute('data-theme',t);
-    document.getElementById('btnLight').classList.toggle('on',t==='light');
-    document.getElementById('btnDark').classList.toggle('on',t==='dark');
-    renderSwatches();
-  }
-  const palette=[
-    ['Duescape Blue','--blue-600'],
-    ['Accent Blue','--blue-500'],
-    ['Gradient Start','--blue-400'],
-    ['Blue Soft','--blue-100'],
-    ['Success','--green-500'],
-    ['Mint Chip','--mint-100'],
-    ['Danger','--red-500'],
-    ['Background','--bg'],
-    ['Surface','--surface'],
-    ['Surface 2','--surface-2'],
-    ['Border','--border'],
-    ['Text Primary','--text-1'],
-    ['Text Secondary','--text-2'],
-    ['Text Tertiary','--text-3'],
-  ];
-  function renderSwatches(){
-    const cs=getComputedStyle(document.documentElement);
-    document.getElementById('swatches').innerHTML=palette.map(([name,v])=>{
-      const val=cs.getPropertyValue(v).trim();
-      return `<div class="swatch"><div class="chip" style="background:${val}"></div>
-        <div class="meta"><div class="name">${name}</div><div class="hex">${v} · ${val.toUpperCase()}</div></div></div>`;
-    }).join('');
-  }
-  renderSwatches();
+const P = {
+  'primary/50':'#E6EEFF','primary/100':'#CCDDFF','primary/200':'#99BBFF','primary/300':'#6699FF','primary/400':'#3377FF',
+  'primary/500':'#0057FF','primary/600':'#0046CC','primary/700':'#003499','primary/800':'#002366','primary/900':'#001133',
+  'neutral/0':'#FFFFFF','neutral/25':'#F7F9FC','neutral/50':'#F8FAFC','neutral/100':'#F1F5F9','neutral/200':'#E2E8F0',
+  'neutral/300':'#CBD5E1','neutral/400':'#94A3B8','neutral/500':'#64748B','neutral/600':'#475569','neutral/700':'#334155',
+  'neutral/800':'#1E293B','neutral/900':'#0F172A',
+  'ink/100':'#232940','ink/200':'#1A1F30','ink/300':'#121624','ink/400':'#0E1320','ink/500':'#080B14',
+  'success/50':'#E6FFF6','success/500':'#00D4A4','success/600':'#00A680','success/700':'#00775C',
+  'warning/50':'#FFF8E6','warning/500':'#FFB020','warning/600':'#D98C00','warning/700':'#966200',
+  'error/50':'#FFEDED','error/500':'#FF4D4F','error/600':'#D93638','error/700':'#C02427'
+};
+const ramps = {
+  'ramp-brand':['primary/50','primary/100','primary/200','primary/300','primary/400','primary/500','primary/600','primary/700','primary/800','primary/900'],
+  'ramp-neutral':['neutral/0','neutral/25','neutral/50','neutral/100','neutral/200','neutral/300','neutral/400','neutral/500','neutral/600','neutral/700','neutral/800','neutral/900'],
+  'ramp-ink':['ink/100','ink/200','ink/300','ink/400','ink/500'],
+  'ramp-status':['success/50','success/500','success/600','success/700','warning/50','warning/500','warning/600','warning/700','error/50','error/500','error/600','error/700']
+};
+for (const [id, names] of Object.entries(ramps)) {
+  document.getElementById(id).innerHTML = names.map(n =>
+    `<div class="chipcol"><div class="sw" style="background:${P[n]}"></div><div class="nm">${n}</div><div class="vl">${P[n]}</div></div>`).join('');
+}
+
+const sem = [
+  ['bg/canvas','neutral/25','ink/400','Screen ground'],
+  ['bg/surface','neutral/0','ink/300','Cards, sheets, tab bar'],
+  ['bg/raised','neutral/50','ink/200','Skeletons, nested fills, neutral badges'],
+  ['bg/sunken','neutral/100','ink/500','Modal scrim, code blocks'],
+  ['border/default','neutral/200','ink/100','Card edges, dividers, skeleton fill'],
+  ['border/strong','neutral/300','neutral/700','Unchecked controls, toggle track off'],
+  ['text/primary','neutral/900','neutral/50','Headings, amounts, list names'],
+  ['text/secondary','neutral/600','neutral/300','Body copy, key labels'],
+  ['text/tertiary','neutral/500','neutral/400','Captions, placeholders, meta'],
+  ['text/inverse','neutral/0','neutral/900','Text on a filled surface'],
+  ['text/brand','primary/500','primary/300','Saved amounts, links, active tab'],
+  ['action/primary','primary/500','primary/500','Primary button'],
+  ['action/primary-hover','primary/600','primary/400','Primary hover and pressed'],
+  ['action/primary-subtle','primary/50','ink/200','Secondary hover, trial badge, icon tiles'],
+  ['action/on-primary','neutral/0','neutral/0','Label on a filled action'],
+  ['action/outline','primary/500','primary/400','Secondary button border, focus ring'],
+  ['action/ghost-hover','neutral/100','ink/200','Ghost button hover'],
+  ['action/disabled','neutral/200','ink/100','Disabled fill and border'],
+  ['action/disabled-text','neutral/400','neutral/600','Disabled label'],
+  ['status/success','success/500','success/500','Active indicator, toggle on confirmation'],
+  ['status/success-subtle','success/50','ink/200','Active badge ground'],
+  ['status/success-text','success/700','success/500','Active badge label'],
+  ['status/warning','warning/500','warning/500','Paused indicator'],
+  ['status/warning-subtle','warning/50','ink/200','Paused badge ground'],
+  ['status/warning-text','warning/700','warning/500','Paused badge label'],
+  ['status/danger','error/600','error/600','Destructive button, overdue marker'],
+  ['status/danger-subtle','error/50','ink/200','Overdue and failed badge ground'],
+  ['status/danger-text','error/700','error/500','Overdue and failed badge label, form errors']
+];
+document.getElementById('semtable').innerHTML = sem.map(([t,la,da,role]) =>
+  `<tr><td class="tok">${t}</td>
+   <td><span class="dot" style="background:${P[la]}"></span><span class="mono">${la}</span></td>
+   <td><span class="dot" style="background:${P[da]}"></span><span class="mono">${da}</span></td>
+   <td>${role}</td></tr>`).join('');
+
+const type = [
+  ['Display',48,800,110,-2,'Case study and marketing only'],
+  ['Heading/XL',32,800,112,-2,'Monthly total, the one hero figure per screen'],
+  ['Heading/LG',26,800,118,-2,'Screen title'],
+  ['Heading/MD',24,800,120,-2,'Object title and greeting name'],
+  ['Heading/SM',20,800,125,-2,'Secondary amounts'],
+  ['Title/LG',18,700,138,-1,'App header title, card title'],
+  ['Title',16,700,140,0,'Card title'],
+  ['Body/LG',15,400,150,0,'Input value, settings label'],
+  ['Body/MD',14,400,150,0,'Body copy'],
+  ['Body/MD Medium',14,500,150,0,'Body copy, emphasised'],
+  ['Body/MD Strong',14,600,150,0,'List item name'],
+  ['Body/SM',13,400,148,0,'Secondary copy, table rows'],
+  ['Body/SM Strong',13,600,148,0,'Table values'],
+  ['Caption',12,400,142,0,'Meta line'],
+  ['Caption Strong',12,600,142,0,'Meta line, emphasised'],
+  ['Label',11,600,130,9,'Uppercase section label'],
+  ['Micro',10,500,130,0,'Chart and tab labels']
+];
+document.getElementById('typeramp').innerHTML = type.map(([n,s,w,lh,ls,use]) => {
+  const upper = n === 'Label' ? 'text-transform:uppercase;' : '';
+  const size = Math.min(s, 30);
+  return `<div class="typerow">
+    <div class="spec">${n} · ${s}px / ${w} / ${lh}% / ${ls}%</div>
+    <div class="sample" style="font-size:${size}px;font-weight:${w};line-height:${lh}%;letter-spacing:${ls/100}em;${upper}">Duescape €132,94</div>
+    <div class="use">${use}</div></div>`;
+}).join('');
+
+const glyphs = {
+  home:'<path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/>',
+  search:'<circle cx="11" cy="11" r="7"/><path d="M16.6 16.6 21 21"/>',
+  bell:'<path d="M18 8a6 6 0 1 0-12 0c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.7 21a2 2 0 0 1-3.4 0"/>',
+  user:'<circle cx="12" cy="8" r="4"/><path d="M4 21a8 8 0 0 1 16 0"/>',
+  card:'<rect x="2" y="5" width="20" height="14" rx="2"/><path d="M2 10h20"/>',
+  settings:'<path d="M4 7h9M19 7h1M4 17h3M13 17h7"/><circle cx="16" cy="7" r="2.4"/><circle cx="10" cy="17" r="2.4"/>',
+  chart:'<path d="M4 20V10M10 20V4M16 20v-7M2 20h20"/>',
+  check:'<path d="M20 6 9 17l-5-5"/>',
+  trash:'<path d="M4 7h16M10 11v6M14 11v6M6 7l1 13h10l1-13M9 7V4h6v3"/>',
+  plus:'<path d="M12 5v14M5 12h14"/>',
+  calendar:'<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M3 10h18M8 3v4M16 3v4"/>',
+  'chevron-right':'<path d="m9 6 6 6-6 6"/>',
+  clock:'<circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/>',
+  pause:'<path d="M9 5v14M15 5v14"/>',
+  play:'<path d="M8 5.5v13l11-6.5z"/>',
+  x:'<path d="M18 6 6 18M6 6l12 12"/>',
+  'alert-triangle':'<path d="M12 4 2.7 20h18.6z"/><path d="M12 10v4M12 17.4v.2"/>',
+  'alert-circle':'<circle cx="12" cy="12" r="9"/><path d="M12 7.5v5M12 16.2v.2"/>',
+  'arrow-left':'<path d="M19 12H5M11 6l-6 6 6 6"/>',
+  more:'<circle cx="5" cy="12" r="1.4"/><circle cx="12" cy="12" r="1.4"/><circle cx="19" cy="12" r="1.4"/>',
+  filter:'<path d="M3 5h18l-7 8v6l-4 2v-8z"/>',
+  sort:'<path d="M7 4v16M3 16l4 4 4-4M17 20V4M13 8l4-4 4 4"/>',
+  download:'<path d="M12 3v12M7 11l5 5 5-5M4 20h16"/>',
+  edit:'<path d="M4 20h4L20 8l-4-4L4 16z"/><path d="M14 6l4 4"/>',
+  'chevron-down':'<path d="m6 9 6 6 6-6"/>',
+  moon:'<path d="M20 14.5A8.5 8.5 0 0 1 9.5 4 8.5 8.5 0 1 0 20 14.5z"/>',
+  shield:'<path d="M12 3 4 6v6c0 5 3.5 8 8 9 4.5-1 8-4 8-9V6z"/>',
+  help:'<circle cx="12" cy="12" r="9"/><path d="M9.5 9.2A2.6 2.6 0 0 1 14.6 10c0 1.8-2.6 2-2.6 3.6M12 17v.2"/>',
+  logout:'<path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4M16 17l5-5-5-5M21 12H9"/>',
+  inbox:'<path d="M3 12h5l1.5 3h5L16 12h5"/><path d="M4.5 5h15l1.5 7v5a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-5z"/>',
+  globe:'<circle cx="12" cy="12" r="9"/><path d="M3 12h18M12 3c2.5 2.6 3.8 5.7 3.8 9S14.5 18.4 12 21c-2.5-2.6-3.8-5.7-3.8-9S9.5 5.6 12 3z"/>'
+};
+const svg = (k,size) => `<svg width="${size||24}" height="${size||24}" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round">${glyphs[k]}</svg>`;
+document.getElementById('icons').innerHTML = Object.keys(glyphs).map(k =>
+  `<figure>${svg(k)}<figcaption>${k}</figcaption></figure>`).join('');
+
+document.getElementById('badges').innerHTML = [
+  ['Active','b-active','check'],['Trial','b-trial','clock'],['Paused','b-paused','pause'],
+  ['Cancelled','b-cancelled','x'],['Expired','b-expired','alert-circle'],
+  ['Payment failed','b-failed','alert-triangle'],['Overdue','b-overdue','alert-circle']
+].map(([l,c,g]) => `<span class="badge ${c}">${svg(g,13)}${l}</span>`).join('');
+
+document.getElementById('quickactions').innerHTML = [['plus','Add'],['download','Import'],['bell','Reminders']].map(([g,l]) =>
+  `<div style="width:108px;padding:14px 12px;border:1px solid var(--border-default);border-radius:var(--r-tile);background:var(--bg-surface);display:grid;justify-items:center;gap:8px">
+    <span style="width:36px;height:36px;border-radius:var(--r-md);background:var(--action-primary-subtle);display:grid;place-items:center;color:var(--text-brand)">${svg(g,20)}</span>
+    <span style="font-size:12px;font-weight:600;color:var(--text-primary)">${l}</span></div>`).join('');
+
+const SVC = { Netflix:'--primary-500', Spotify:'--success-500', iCloud:'--primary-300', Notion:'--neutral-700', Adobe:'--error-500', LinkedIn:'--primary-600', PayPal:'--warning-500', Generic:'--neutral-400' };
+document.getElementById('logos').innerHTML = Object.entries(SVC).map(([n,v]) =>
+  `<span class="logo" style="background:var(${v})" title="${n}">${n === 'Generic' ? '?' : n[0]}</span>`).join('');
+
+const subs = [
+  ['Netflix','Netflix','€12,99 · Monthly','b-active','Active','check'],
+  ['Adobe','Adobe Creative Cloud','€59,99 · Monthly','b-paused','Paused','pause'],
+  ['Notion','Notion Plus','Free until 22 Apr, then €7,99','b-trial','Trial','clock'],
+  ['LinkedIn','LinkedIn Premium','Due 24 Mar · €39,99','b-overdue','Overdue','alert-circle']
+];
+document.getElementById('subrows').innerHTML = subs.map(([k,n,m,c,l,g]) =>
+  `<div class="subrow"><span class="logo" style="background:var(${SVC[k]})">${k[0]}</span>
+   <span style="flex:1"><span class="nm">${n}</span><br><span class="mt">${m}</span></span>
+   <span class="badge ${c}">${svg(g,13)}${l}</span></div>`).join('');
+
+document.getElementById('payrows').innerHTML = [
+  ['Netflix','Netflix','Next payment · 12 Apr','€12,99',null],
+  ['Adobe','Adobe Creative Cloud','Next payment · 17 Apr','€59,99',null],
+  ['Spotify','Spotify Premium','Reminder 2 days before · 18 Apr',null,true]
+].map(([k,n,m,a,t]) =>
+  `<div class="subrow"><span class="logo" style="background:var(${SVC[k]})">${k[0]}</span>
+   <span style="flex:1"><span class="nm" style="font-size:14px">${n}</span><br><span class="mt">${m}</span></span>
+   ${t ? '<span class="switch" aria-hidden="true" style="background:var(--action-primary)"><span style="transform:translateX(20px)"></span></span>' : `<span class="amt">${a}</span>`}</div>`).join('');
+
+document.getElementById('billrows').innerHTML = [['12 Mar 2026','€12,99'],['12 Feb 2026','€12,99'],['12 Jan 2026','€12,99']].map(([d,a]) =>
+  `<div class="subrow"><span style="flex:1;font-size:13px;color:var(--text-secondary)">${d}</span><span style="font-size:13px;font-weight:600;color:var(--text-primary);font-variant-numeric:tabular-nums">${a}</span></div>`).join('');
+
+document.getElementById('toasts').innerHTML = [
+  ['check','var(--status-success-text)','Netflix paused until 10 May','Undo'],
+  ['alert-triangle','var(--status-danger-text)','Could not save. Check your connection.','Retry'],
+  ['inbox','var(--text-brand)','4 subscriptions added','View']
+].map(([g,c,t,a]) => `<div class="toast" style="margin-bottom:10px"><span style="color:${c}">${svg(g,20)}</span>${t}<b>${a}</b></div>`).join('');
+
+const trend = [['Nov',191.93,88],['Dec',191.93,88],['Jan',184.30,85],['Feb',178.73,82],['Mar',174.61,80],['Apr',132.94,61]];
+document.getElementById('trend').innerHTML =
+  `<div style="font-size:11px;color:var(--text-tertiary);margin-bottom:10px">€132,94 this month, down from a €175,74 six-month average</div>
+   <div style="display:flex;align-items:flex-end;justify-content:space-between;height:112px">
+   ${trend.map(([m,v,h],i) => {
+     const now = i === trend.length-1;
+     return `<div style="display:grid;justify-items:center;gap:6px">
+       ${now ? '<span style="font-size:10px;font-weight:600;color:var(--text-primary)">€132,94</span>' : ''}
+       <span style="display:block;width:34px;height:${h}px;border-radius:4px 4px 0 0;background:var(${now?'--primary-500':'--primary-200'})" title="${m} €${v.toFixed(2).replace('.',',')}"></span>
+       <span style="font-size:10px;color:var(${now?'--text-primary':'--text-tertiary'})">${m}</span></div>`;
+   }).join('')}</div>`;
+
+const cats = [['Creative tools','€59,99','45,1%',45.1],['Professional','€39,99','30,1%',30.1],['Entertainment','€23,98','18,0%',18.0],['Productivity','€7,99','6,0%',6.0],['Cloud & storage','€0,99','0,8%',0.8]];
+document.getElementById('cats').innerHTML = cats.map(([n,a,p,v]) =>
+  `<div style="margin-bottom:12px">
+    <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:6px">
+      <span style="font-size:13px;font-weight:500;color:var(--text-primary)">${n}</span>
+      <span style="font-size:12px;font-weight:600;color:var(--text-secondary);font-variant-numeric:tabular-nums">${a} · ${p}</span></div>
+    <div style="height:8px;border-radius:999px;background:var(--bg-raised);overflow:hidden">
+      <span style="display:block;height:100%;width:${v}%;min-width:6px;border-radius:999px;background:var(--primary-500)"></span></div>
+  </div>`).join('');
+
+document.getElementById('navbar').innerHTML = [['home','Home',true],['card','Subscriptions',false],['bell','Reminders',false],['chart','Insights',false],['user','Profile',false]]
+  .map(([g,l,on]) => `<span class="tab${on?' on':''}">${svg(g,22)}${l}</span>`).join('');
+
+const a11y = [
+  ['text/primary on bg/surface','Light',17.85],['text/secondary on bg/surface','Light',7.58],['text/tertiary on bg/surface','Light',4.76],
+  ['text/brand on bg/surface','Light',5.52],['action/on-primary on action/primary','Light',5.52],['action/on-primary on status/danger','Light',4.63],
+  ['status/success-text on subtle','Light',5.27],['status/warning-text on subtle','Light',4.90],['status/danger-text on subtle','Light',5.28],
+  ['text/primary on bg/surface','Dark',17.21],['text/secondary on bg/surface','Dark',12.13],['text/tertiary on bg/surface','Dark',7.02],
+  ['text/brand on bg/surface','Dark',6.49],['status/success-text on subtle','Dark',8.54],['status/warning-text on subtle','Dark',8.95],
+  ['status/danger-text on subtle','Dark',5.01]
+];
+document.getElementById('a11ytable').innerHTML = a11y.map(([p,t,r]) =>
+  `<tr><td>${p}</td><td class="mono">${t}</td><td class="ratio">${r.toFixed(2).replace('.',',')}:1</td><td class="pass">Pass</td></tr>`).join('');
+
+document.getElementById('css').textContent = `:root {
+  /* primitives */
+  --primary-50:#E6EEFF;  --primary-300:#6699FF; --primary-400:#3377FF;
+  --primary-500:#0057FF; --primary-600:#0046CC;
+  --neutral-0:#FFFFFF;   --neutral-25:#F7F9FC;  --neutral-50:#F8FAFC;  --neutral-100:#F1F5F9;
+  --neutral-200:#E2E8F0; --neutral-300:#CBD5E1; --neutral-400:#94A3B8;
+  --neutral-500:#64748B; --neutral-600:#475569; --neutral-700:#334155; --neutral-900:#0F172A;
+  --ink-100:#232940; --ink-200:#1A1F30; --ink-300:#121624; --ink-400:#0E1320; --ink-500:#080B14;
+  --success-500:#00D4A4; --success-700:#00775C;
+  --warning-500:#FFB020; --warning-700:#966200;
+  --error-500:#FF4D4F;   --error-600:#D93638;   --error-700:#C02427;
+
+  /* semantic — light */
+  --bg-canvas:var(--neutral-25);        --bg-surface:var(--neutral-0);
+  --bg-raised:var(--neutral-50);        --bg-sunken:var(--neutral-100);
+  --border-default:var(--neutral-200);  --border-strong:var(--neutral-300);
+  --text-primary:var(--neutral-900);    --text-secondary:var(--neutral-600);
+  --text-tertiary:var(--neutral-500);   --text-inverse:var(--neutral-0);
+  --text-brand:var(--primary-500);
+  --action-primary:var(--primary-500);  --action-primary-hover:var(--primary-600);
+  --action-primary-subtle:var(--primary-50); --action-on-primary:var(--neutral-0);
+  --action-outline:var(--primary-500);  --action-ghost-hover:var(--neutral-100);
+  --action-disabled:var(--neutral-200); --action-disabled-text:var(--neutral-400);
+  --status-success:var(--success-500);  --status-success-subtle:var(--success-50);
+  --status-success-text:var(--success-700);
+  --status-warning:var(--warning-500);  --status-warning-subtle:var(--warning-50);
+  --status-warning-text:var(--warning-700);
+  --status-danger:var(--error-600);     --status-danger-subtle:var(--error-50);
+  --status-danger-text:var(--error-700);
+
+  /* radius */
+  --r-xs:6px; --r-sm:8px; --r-md:10px; --r-lg:12px;
+  --r-tile:14px; --r-card:16px; --r-xl:20px; --r-pill:999px;
+
+  /* spacing */
+  --s-1:4px; --s-2:8px; --s-3:12px; --s-4:16px;
+  --s-5:20px; --s-6:24px; --s-8:32px; --s-10:40px;
+}
+
+[data-theme="dark"] {
+  --bg-canvas:var(--ink-400);          --bg-surface:var(--ink-300);
+  --bg-raised:var(--ink-200);          --bg-sunken:var(--ink-500);
+  --border-default:var(--ink-100);     --border-strong:var(--neutral-700);
+  --text-primary:var(--neutral-50);    --text-secondary:var(--neutral-300);
+  --text-tertiary:var(--neutral-400);  --text-inverse:var(--neutral-900);
+  --text-brand:var(--primary-300);
+  --action-primary-hover:var(--primary-400);
+  --action-primary-subtle:var(--ink-200); --action-outline:var(--primary-400);
+  --action-ghost-hover:var(--ink-200);
+  --action-disabled:var(--ink-100);    --action-disabled-text:var(--neutral-600);
+  --status-success-subtle:var(--ink-200); --status-success-text:var(--success-500);
+  --status-warning-subtle:var(--ink-200); --status-warning-text:var(--warning-500);
+  --status-danger-subtle:var(--ink-200);  --status-danger-text:var(--error-500);
+}`;
+
+for (const id of ['chip-monthly','chip-yearly','chip-trials','chip-all']) {
+  document.getElementById(id).addEventListener('click', e => {
+    for (const x of ['chip-monthly','chip-yearly','chip-trials','chip-all']) document.getElementById(x).setAttribute('aria-pressed','false');
+    e.currentTarget.setAttribute('aria-pressed','true');
+  });
+}
+for (const id of ['sw-reminder','sw-set','cb-netflix','cb-spotify']) {
+  const el = document.getElementById(id);
+  el.addEventListener('click', () => el.setAttribute('aria-checked', el.getAttribute('aria-checked') === 'true' ? 'false' : 'true'));
+}
 </script>
+
 </body>
 </html>
