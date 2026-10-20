@@ -1,6 +1,6 @@
 # Duescape: Design System
 
-A living style guide for Duescape, a subscription and budget tracker mobile app. Built as a single self-contained HTML page: no frameworks, no build step, just design tokens and live components.
+A living style guide for Duescape, a subscription and budget tracker mobile app. Client project, Netherlands. Built as a single self-contained HTML page: no frameworks, no build step, just design tokens and live components.
 
 **Live demo:** https://tanyaaisen07-uiux.github.io/duescape-design-system/
 
