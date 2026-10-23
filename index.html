@@ -228,6 +228,8 @@ footer{padding-block:32px 8px;border-top:1px solid var(--border-default);color:v
       <span class="sep">Rules</span>
       <a href="#a11y">Accessibility</a>
       <a href="#motion">Motion</a>
+      <a href="#contribute">Contribution</a>
+      <a href="#ai">AI-readable system</a>
       <a href="#dev">Developer tokens</a>
     </nav>
   </aside>
@@ -590,9 +592,48 @@ footer{padding-block:32px 8px;border-top:1px solid var(--border-default);color:v
       </div>
     </section>
 
+    <section id="contribute">
+      <h2>Contribution</h2>
+      <p class="lede">How the library grows without fragmenting. Anyone can propose a component; the system keeps one owner for naming, tokens and the final call.</p>
+      <div class="tablewrap">
+        <table>
+          <thead><tr><th>Step</th><th>Who</th><th>What happens</th><th>Done when</th></tr></thead>
+          <tbody>
+            <tr><td class="tok">1 · Check</td><td>Any designer</td><td>Search the library first. Most requests are a missing variant of something that already exists.</td><td>Existing component ruled out</td></tr>
+            <tr><td class="tok">2 · Propose</td><td>Any designer</td><td>One-page request: the use case, screens where it appears, and why current components do not cover it.</td><td>Request logged</td></tr>
+            <tr><td class="tok">3 · Triage</td><td>System owner</td><td>Weekly decision: reuse as is, extend with a variant, keep local to the product, or build as new.</td><td>Decision recorded with a reason</td></tr>
+            <tr><td class="tok">4 · Build</td><td>Proposer + owner + engineer</td><td>Figma component on semantic variables only, all states, contrast check, spec for code.</td><td>Design and code match</td></tr>
+            <tr><td class="tok">5 · Release</td><td>System owner</td><td>Changelog entry, version bump, note on what changed for teams already using it.</td><td>Published to the library</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="note"><b>Local first.</b> A one-off pattern lives in the product file. It moves into the system when a second screen or team needs it. <b>Extend before adding.</b> A new variant beats a new component; a new component beats a detached copy.</div>
+    </section>
+
+    <section id="ai">
+      <h2>AI-readable system</h2>
+      <p class="lede">The same rules have to work for a person reading this page and for an assistant generating a screen. So every decision exists in two forms: visual here, structured in <a href="tokens.json"><code>tokens.json</code></a>.</p>
+      <div class="grid">
+        <div class="panel">
+          <h3>Structured tokens</h3>
+          <p class="d">W3C Design Tokens format. Semantic tokens alias primitives, light and dark share one set of names, every token carries its role as a description.</p>
+          <p class="vars">color · semantic.light · semantic.dark · typography · spacing · radius · motion · rules</p>
+        </div>
+        <div class="panel">
+          <h3>Names that explain themselves</h3>
+          <p class="d"><code>category/role-state</code>, for example <code>action/primary-hover</code>. A name says where a token is used, never what it looks like, so a model can pick the right one without seeing the palette.</p>
+        </div>
+        <div class="panel">
+          <h3>Rules as sentences</h3>
+          <p class="d">Usage rules ship inside the token file as plain sentences: no raw hex on screens, green only for status, destructive actions need a confirmation. A generated layout can be checked against them line by line.</p>
+        </div>
+      </div>
+      <div class="note"><b>Where AI output gets overridden.</b> Anything around money and destructive actions is reviewed by hand: amount formatting, cancel flows, error copy. Generated screens that use a primitive or a hex value are rejected before review, because they break theming silently.</div>
+    </section>
+
     <section id="dev">
       <h2>Developer tokens</h2>
-      <p class="lede">Drop-in custom properties. Application code references the semantic block; the primitive block exists so the semantic block has something to point at.</p>
+      <p class="lede">Drop-in custom properties. Application code references the semantic block; the primitive block exists so the semantic block has something to point at. The same values are available as structured JSON in <a href="tokens.json"><code>tokens.json</code></a>.</p>
       <pre><code id="css"></code></pre>
     </section>
 
