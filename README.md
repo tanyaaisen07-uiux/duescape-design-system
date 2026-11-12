@@ -21,5 +21,5 @@ The working specification for Duescape, a subscription and budget tracker mobile
 - **Developer tokens:** copy-paste CSS custom properties for both themes, plus `tokens.json`
 
 ## Author
-Designed and documented by Tania Aisen, Product & UI/UX Designer
-[Portfolio](https://tania-aisen.framer.website/) · [LinkedIn](https://www.linkedin.com/in/tania-aisen)
+Designed and documented by Tania Aisen, Brand, Web & Product Designer at Aisen Studio
+[Portfolio](https://tanyaaisen07-uiux.github.io/aisen-studio/) · [LinkedIn](https://www.linkedin.com/in/tania-aisen)
